@@ -1,0 +1,70 @@
+body {
+    background-color: rgb(255, 224, 182);
+}
+
+header {
+    color: brown;
+    background-color: rgba(255, 236, 217, 0.767);
+}
+#navigation {
+    background-color: rgba(255, 236, 217, 0.767);
+}
+
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    font-family: serif;
+    text-decoration: underline;
+    font-weight: none;
+}
+
+a:link {
+    color: black;
+}
+
+a:visited {
+    color: brown;
+}
+
+a:hover {
+    color: #8c2238;
+    font-weight: bold;
+}
+
+a:active {
+    color: #8c2238;
+    text-decoration: none;
+}
+
+p {
+    border-style: solid;
+    border-width: 1px;
+    width: 455px;
+    text-align: center;
+    padding: 1% 1% 4% 1%;
+    font-size: 120%;
+    background-color: rgba(255, 236, 217, 0.767);
+}
+
+.footerholder {
+    bottom: 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    background: rgba(255, 236, 217, 0.767);
+}
+
+.footer {
+    font-family: Times New Roman;
+    color: brown;
+}
+
+.col {
+    margin: 1%;
+    padding: 1%;
+    float: left;
+    width: 24%;
+    text-align: right;
+}

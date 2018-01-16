@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Menu Page</title>
+        <script type="text/JavaScript" src="restaurantScript.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="restaurantStyles.css" rel="stylesheet" type="text/css"/>
+        <style>
+            .col {
+                margin: .5%;
+                float: left;
+                width: 30%;
+                text-align: center;
+            }
+
+            footer {
+                clear: both;
+            }
+
+            table, th, td {
+                padding: 5px 15px 5px 15px;
+                border: none;
+                border-collapse: collapse;
+            }
+
+            table {
+                width: 100%;
+                height: 350px;
+                text-align: left;
+            }
+
+            td, th {
+                height: 20px;
+                width: 60%;
+                font-size: 20px;
+            }
+
+            th {
+                background-color: rgba(231, 167, 114, 0.459);
+                text-decoration: underline;
+                font-size: 25px;
+                height: 60px;
+            }
+
+            tr:nth-child(even) {
+                background-color: rgb(248, 184, 110);
+            }
+
+            tr:nth-child(odd) {
+                background-color: rgb(163, 115, 76);
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <center><h1>JD's Steaks</h1></center>
+            <nav>
+                <ul class="nav nav-pills">
+                    <li role="presentation"><a href="restaurant.html">
+                        <span class="glyphicon glyphicon-home"></span></a></li>
+                    <li role="presentation" class="active"><a href="#">Menu</a></li>
+                    <li role="presentation"><a href="contactUs.html">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="page-header">
+            <center>
+            <h1>We are opening a new location!<br/>
+            <small>It's located at 148 Forest Blvd. Meadow Stream, MN 55246</small></h1>
+            </center>
+        </div>
+            <div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <center>
+                        <h2>Filet Mignon</h2><br/>
+                            The most juicy and tender thick cut steak,<br/>
+                            seasoned and seared to perfection.<br/>
+                            $23.95
+                        <h2>Ribeye</h2><br/>
+                            Fire grilled, and extra marbling gives this cut<br/>
+                            an excellent, savory and unique taste.<br/>
+                            $19.95
+                        </center>
+                    </div>
+                    <div class="col-sm-4">
+                        <center>
+                        <h2>Bone-In Ribeye</h2>
+                            Cut with bone in gives this steak an extrodinary<br/>
+                            flavor. Flame grilled and seasoned with percision.<br/>
+                            $20.95
+                        <h2>New York Strip</h2>
+                            Classic Strip steak with delicious flavor and superb<br/>
+                            tenderness. Cooked to order and seasoned to perfection.<br/>
+                            $17.95
+                        </center>
+                    </div>
+                    <div class="col-sm-4">
+                        <center>
+                        <h2>JD's Porterhouse</h2>
+                            Our porterhouse features a strip cut and filet together.<br/>
+                            Providing the perfect combination of tenderness and flavorfull.<br/>
+                            Seasoned with our special blend of herbs and seared to order.<br/>
+                            $26.95
+                        <h2>Center-Cut Sirloin</h2>
+                            Center-cut for flavor and tenderness. This steak is hearty and<br/>
+                            delicious, also seasoned and seared to perfection.<br/>
+                            $18.95
+                        </center>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2">Beverages</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Root Beer</td>
+                                <td>$3.00</td>
+                            </tr>
+                            <tr>
+                                <td>Bottled Water</td>
+                                <td>$1.25</td>                   
+                            </tr>
+                            <tr>
+                                <td>Lemonade</td>
+                                <td>$1.00</td>
+                            </tr>
+                            <tr>
+                                <td>Iced Tea</td>
+                                <td>$1.25</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <div class="footerholder">
+            <div class="footer">
+                <hr style="border: 2px solid #8c2238;"/>
+                Blue Jay St. NW, Portland, MN 55348</br>
+                (763) 555-7654   
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>    
+    </body>
+</html>

@@ -1,0 +1,25 @@
+body {
+    background: rgb(252, 251, 232);
+    font-family: Times New Roman;
+}
+
+img {
+    padding: 1%;
+}
+
+h1, h2, h3 {
+    margin: 0;
+    padding: .2%;
+}
+
+a {
+    color: blue;
+}
+
+hr {
+    margin: 1.5% 0 1% 0;
+}
+
+caption {
+    padding: 7px;
+}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Home Page</title>
+        <script type="text/JavaScript" src="restaurantScript.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="restaurantStyles.css" rel="stylesheet" type="text/css"/>
+        <style>
+            .carousel-inner {
+                width: 70%;
+                margin: auto;
+            }
+            .carousel {
+                height: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <center><h1>JD's Steaks</h1></center>
+            <nav>
+                <ul class="nav nav-pills">
+                    <li role="presentation" class="active"><a href="#">
+                        <span class="glyphicon glyphicon-home"></span></a></li>
+                    <li role="presentation"><a href="menu.html">Menu</a></li>
+                    <li role="presentation"><a href="contactUs.html">Contact Us</a></li>
+                </ul>
+            </nav>
+            <center>
+            <div class="page-header">
+                <h1>We are opening a new location!<br/>
+                <small>It's located at 148 Forest Blvd. Meadow Stream, MN 55246</small></h1>
+            </div>
+            </center>
+        </header>
+        <div class="container">
+            <div class="row">
+                <center>
+                <div class="col-sm-12"><img src="http://www.seriouseats.com/recipes/assets_c/2015/05/Anova-Steak-Guide-Sous-Vide-Photos15-beauty-thumb-1500xauto-423558.jpg" 
+                style="width: 520px; height: 280px; margin:2% 2% 6% 2%;"></div>
+                </center>
+            </div>
+        </div>
+            <div class="row">
+                <center>
+                <div class="col-sm-12"> 
+                    <p>
+                        JD's Steaks is known as one of the best and highest quality steakhouses
+                        in the five state area. All of the produce and meats are farm grown and grass
+                        fed. We have outstanding customer service and our employees are very well trained 
+                        and have vast experience in the restaurant business. 
+                    </p>
+                </div>
+                </center>
+            </div>
+        <div class="container">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                  <li data-target="#myCarousel" data-slide-to="1"></li>
+                  <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                        <img src="https://www.businessobserverfl.com/images/uploads/articles/cache/125920855467-630x420.jpg" alt="Building">
+                        <div class="carousel-caption">
+                        <h3>New Location!</h3>
+                        <p>148 Forest Blvd. Meadow Stream, MN 55246</p>
+                        </div>
+                    </div>
+                    <div class="item active">
+                        <img src="https://mms.businesswire.com/media/20130620006467/en/373715/5/P.F._Chang%27s_Summer_Seasonal_Menu_Items.jpg" alt="Food Spread">
+                        <div class="carousel-caption">
+                        <h3>Seasonal Menu!</h3>
+                        <p>Special options for this season.</p>
+                        </div>
+                    </div>
+                    <div class="item active">
+                        <img src="https://www.homegrounds.co/wp-content/uploads/2016/09/11-orange-crush-brew.jpg" alt="Drink">
+                        <div class="carousel-caption">
+                        <h3>SG Special Brew!</h3>
+                        <p>Drink of the month.</p>
+                        </div>
+                    </div>
+                </div>
+                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                  <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                  <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+        <div class="footerholder">
+            <div class="footer">
+                <hr style="border: 2px solid #8c2238;"/>
+                Blue Jay St. NW, Portland, MN 55348</br>
+                (763) 555-7654   
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script> 
+    </body>
+</html>

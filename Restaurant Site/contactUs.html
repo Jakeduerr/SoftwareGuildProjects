@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Contact Us</title>
+        <script type="text/JavaScript" src="restaurantScript.js"></script>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="restaurantStyles.css" rel="stylesheet" type="text/css"/>
+        <style>
+            input[type=text] {
+                padding: 1%;
+                margin: 2%;
+                width: 50%;
+            }
+
+            select {
+                padding: 1%;
+                margin: 2%;
+                width: 53%;
+            }
+
+            textarea {
+                padding: 1%;
+                margin: 2%;
+                width: 50%;
+                height: 125px;
+            }
+
+            input[type=radio] {
+                width: 5%;
+                position: left;
+            }
+
+            input[type=checkbox] {
+                padding: 1%;
+                margin: 2.3%;
+            }
+
+            input[type=submit] {
+                width: 30%;
+                padding: 1%;
+                margin: 2%;
+            } 
+
+            #fullnamelabel {
+                font-weight: bold;
+            }
+
+            #emaillabel {
+                font-weight: bold;
+            }
+
+            #phonelabel {
+                font-weight: bold;
+            }
+
+        </style>
+    </head>
+    <body>
+        <header>
+            <center><h1>JD's Steaks</h1></center>
+            <nav>
+                <ul class="nav nav-pills">
+                    <li role="presentation"><a href="restaurant.html">
+                        <span class="glyphicon glyphicon-home"></span></a></li>
+                    <li role="presentation"><a href="menu.html">Menu</a></li>
+                    <li role="presentation" class="active"><a href="#">Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
+        <div class="page-header">
+        <center>
+            <h1>We are opening a new location!<br/>
+            <small>It's located at 148 Forest Blvd. Meadow Stream, MN 55246</small></h1>
+        </center>
+        </div>
+        <div class="row"></div>
+            <div class="col-md-offset-4 col-md-4">
+                <form action="#" method="post">
+                    <div>
+                        <label id="fullnamelabel" for="name">Name:</label> 
+                        <input type="text" name="fullname" required/><br/>
+                    </div>
+                    <div>
+                        <label id="emaillabel" for="email">Email:</label> 
+                        <input type="text" name="emailaddress" required/><br/>
+                    </div>
+                    <div>
+                        <label id="phonelabel" for="phonenumber">Phone:</label> 
+                        <input type="text" name="phonenumber" required/><br/>
+                    </div>
+                    <div>
+                        <label id="inquirylabel" for="inquiry">Reason for Inquiry:</label>
+                        <select name="reasons">
+                            <option value="catering">Catering</checked></option>
+                            <option value="privateparty">Private Party</option>
+                            <option value="feedback">Feedback</option>
+                            <option value="other">Other</option>
+                        </select><br/>
+                    </div>
+                    <div>
+                        <label id="infolabel" for="information">Additional Information:</label> 
+                        <textarea name="information"></textarea><br/>
+                    </div>
+                    <div>
+                        <label id="beenherelabel" for="beenhere">Have you been to the restaurant?</label>
+                        <input type="radio" name="answer" value="no" checked/>No
+                        <input type="radio" name="answer" value="yes" />Yes<br/>
+                    </div>
+                    <div>
+                        <label id="contactlabel" for="contact">Best days to contact you:</label>
+                        <input type="checkbox" name="day" value="monday"/>M
+                        <input type="checkbox" name="day" value="tuesday"/>T
+                        <input type="checkbox" name="day" value="wednesday"/>W
+                        <input type="checkbox" name="day" value="thursday"/>Th
+                        <input type="checkbox" name="day" value="friday"/>F<br/>
+                        <input type="submit" value="Send Request"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="footerholder">
+            <div class="footer">
+                <hr style="border: 2px solid #8c2238;"/>
+                Blue Jay St. NW, Portland, MN 55348</br>
+                (763) 555-7654   
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+    </body>
+</html>
