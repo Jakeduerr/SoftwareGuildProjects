@@ -13,9 +13,8 @@ import java.util.Scanner;
  * @author jakeduerr
  */
 public class RockPaperScissors {
-
-    public static void main(String[] args) {
-
+    
+    public void theGame() {
         while (true) {
 
             Scanner sc = new Scanner(System.in);
@@ -44,8 +43,7 @@ public class RockPaperScissors {
                     userWins++;
                 } else if (compPick > userPick) {
                     compWins++;
-                }
-                if (compPick == 1 && userPick == 3) {
+                } else if (compPick == 1 && userPick == 3) {
                     compWins++;
                 } else if (userPick > compPick) {
                     userWins++;
@@ -53,19 +51,7 @@ public class RockPaperScissors {
                     totalTies++;
                 }
 
-                if (userWins > compWins) {
-                    System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
-
-                } else if (userWins < compWins) {
-                    System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
-
-                } else if (totalTies >= 1) {
-                    System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
-
-                } else if (userWins == compWins) {
-                    System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
-
-                }
+                System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
 
             }
 
@@ -77,10 +63,6 @@ public class RockPaperScissors {
                 System.out.println("The final scores are: ");
                 System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
                 System.out.println("I have won!");
-            } else if (userWins == compWins) {
-                System.out.println("The final scores are: ");
-                System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
-                System.out.println("We have tied.");
             } else {
                 System.out.println("The final scores are: ");
                 System.out.println("Computer Wins: " + compWins + " Your Wins: " + userWins + " Ties: " + totalTies);
@@ -91,11 +73,9 @@ public class RockPaperScissors {
             int userAnswer = sc.nextInt();
 
             switch (userAnswer) {
-                case 1:
-                    userAnswer = 1;
-                    continue;
+
                 case 2:
-                    userAnswer = 2;
+
                     System.out.println("Thanks for playing!");
                     System.exit(0);
             }

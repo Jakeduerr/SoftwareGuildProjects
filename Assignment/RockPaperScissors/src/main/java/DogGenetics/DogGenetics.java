@@ -17,11 +17,10 @@ public class DogGenetics {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        Random rGen = new Random();
 
         System.out.println("What is your dog's name?");
         String dogName = sc.nextLine();
-        
+
         System.out.println("Well then, I have highly reliable report on " + dogName + "'s prestigious background right here.");
 
         int sum = 0;
@@ -30,16 +29,30 @@ public class DogGenetics {
         int dogBreed3 = 0;
         int dogBreed4 = 0;
         int dogBreed5 = 0;
+        
+        Random rGen = new Random();
 
-        while (sum != 100) {
-
+        while(sum < 100) {
+            
             dogBreed1 = rGen.nextInt(96) + 1;
-            dogBreed2 = rGen.nextInt(96) + 1;
-            dogBreed3 = rGen.nextInt(96) + 1;
-            dogBreed4 = rGen.nextInt(96) + 1;
-            dogBreed5 = rGen.nextInt(96) + 1;
+            int randInt = 100 - dogBreed1;
 
+            dogBreed2 = rGen.nextInt(randInt) + 1;
+            int randInt2 = randInt - dogBreed2;
+
+            dogBreed3 = rGen.nextInt(randInt2) + 1;
+            int randInt3 = randInt2 - dogBreed3;
+
+            dogBreed4 = rGen.nextInt(randInt3) + 1;
+            int randInt4 = randInt3 - dogBreed4;
+
+            dogBreed5 = randInt4;
+            
             sum = dogBreed1 + dogBreed2 + dogBreed3 + dogBreed4 + dogBreed5;
+            
+            if(dogBreed5 == 0) {
+                continue;
+            }
         }
 
         System.out.println(dogName + " is: ");
