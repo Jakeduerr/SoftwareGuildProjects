@@ -5,6 +5,7 @@
  */
 package com.sg.dvdlibrary.dao;
 
+import com.sg.dvdlibrary.DvdLibraryDaoException;
 import com.sg.dvdlibrary.dto.Dvd;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -30,7 +31,8 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
 
     //getting new dvd title and putting it in new hashmap called dvds
     @Override
-    public Dvd addDvd(String title, Dvd dvd) {
+    public Dvd addDvd(String title, Dvd dvd) throws DvdLibraryDaoException {
+        loadLibrary();
         Dvd newDvd = dvds.put(title, dvd);
         writeLibrary();
         return newDvd;
@@ -39,35 +41,34 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
     //getting entire list of existing dvds and creating a new Dvd ArrayList but can be
     //treated as a list cuz it implements DvdLibrary
     @Override
-    public List<Dvd> getAllDvds() {
+    public List<Dvd> getAllDvds() throws DvdLibraryDaoException {
         loadLibrary();
         return new ArrayList<Dvd>(dvds.values());
     }
 
     @Override
-    public Dvd getDvd(String title) {
+    public Dvd getDvd(String title) throws DvdLibraryDaoException {
         loadLibrary();
         return dvds.get(title);
     }
 
     @Override
-    public Dvd removeDvd(String title) {
+    public Dvd removeDvd(String title) throws DvdLibraryDaoException {
+        loadLibrary();
         Dvd removedDvd = dvds.remove(title);
         writeLibrary();
         return removedDvd;
     }
-    
+
     //method that loads all data from dvd and splits it into delimiter text
-    private void loadLibrary() {
+    private void loadLibrary() throws DvdLibraryDaoException {
         Scanner sc = null;
         try {
             sc = new Scanner(new BufferedReader(new FileReader(LIBRARY_FILE)));
 
         } catch (FileNotFoundException ex) {
-            System.out.println("File Not Found");
+            throw new DvdLibraryDaoException("File Not Found", ex);
         }
-        
-        
 
         while (sc.hasNextLine()) {
             String currentLine = sc.nextLine();
@@ -83,9 +84,9 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
         }
         sc.close();
     }
-    
+
     //method that writes all the data from a dvd onto a text file
-    private void writeLibrary() {
+    private void writeLibrary() throws DvdLibraryDaoException {
         PrintWriter out = null;
 
         try {

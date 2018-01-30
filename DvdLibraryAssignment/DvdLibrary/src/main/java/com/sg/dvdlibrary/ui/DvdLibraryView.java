@@ -36,7 +36,7 @@ public class DvdLibraryView {
         return io.readInt("Please select from the choices ^ABOVE^", 1, 7);
     }
 
-    //asks user for info about dvd and places it in dvd object
+    //asks user for info about dvd and places it in dvd object and value
     public Dvd getNewDvdInfo() {
         String title = io.readString("Please enter the DVD title: ");
         String releaseDate = io.readString("Please enter the DVD release date: ");
@@ -85,7 +85,7 @@ public class DvdLibraryView {
         io.print(">>> Info on a DVD <<<");
     }
 
-    //promting user to select title and getting that tile 
+    //promting user to select title and getting that title 
     public String getTitleChoice() {
         return io.readString("Please enter the Title of the DVD you're looking for: ");
     }
@@ -104,6 +104,8 @@ public class DvdLibraryView {
         }
         io.readString("Please press enter to continue.");
     }
+
+    
 
     public void displayRemoveDvdBanner() {
         io.print("!!== Remove DVD ==!!");
@@ -130,7 +132,7 @@ public class DvdLibraryView {
     }
 
     public void displayEditDvdSuccessBanner() {
-        io.readString(">>> Congrats! You've successfully edited your DVD!  Please press enter to continue.");
+        io.readString(">>> Congrats! You've successfully edited your DVD! <<<  Please press enter to continue.");
     }
 
     public String getEditChoice() {
@@ -180,6 +182,62 @@ public class DvdLibraryView {
 //
 //        return io.readInt("Please select from the choices ^ABOVE^ ", 1, 6);
 //    }
-
-    
+//    public Dvd getEditDvdInfo() {
+//
+//        boolean askAgain = true;
+//        String title = null;
+//        int menuSelection = 0;
+//        Dvd currentDvd = new Dvd(title);
+//
+//        while (askAgain) {
+//            view.displayEditDvdBanner();
+//            title = view.getEditChoice();
+//            Dvd dvd = dao.getDvd(title);
+//            view.displayDvd(dvd);
+//            menuSelection = getEditMenuSelection();
+//
+//            if(menuSelection) {
+//                
+//                    String title = io.readString("Would you like to Edit your DVD title: ");
+//                    currentDvd.setReleaseDate(releaseDate);
+//                    dao.addDvd(title, currentDvd);
+//                    break;
+//                
+//                    String releaseDate = io.readString("Would you like to Edit DVD release date: ");
+//                    currentDvd.setReleaseDate(releaseDate);
+//                    dao.addDvd(title, currentDvd);
+//                    break;
+//                
+//                    String mpaaRating = io.readString("Please enter the NEW DVD MPAA rating: ");
+//                    currentDvd.setMpaaRating(mpaaRating);
+//                    dao.addDvd(title, currentDvd);
+//                    break;
+//                
+//                    String directorName = io.readString("Please enter the NEW Director's Name: ");
+//                    currentDvd.setDirectorName(directorName);
+//                    dao.addDvd(title, currentDvd);
+//                    break;
+//                
+//                    String studio = io.readString("Please enter the NEW Studio's Name: ");
+//                    currentDvd.setStudio(studio);
+//                    dao.addDvd(title, currentDvd);
+//                    break;
+//                
+//                    String userRating = io.readString("Please enter your NEW personal rating of the DVD: "
+//                            + " (e.g. Hilarious comdedy movie!)");
+//                    currentDvd.setUserRating(userRating);
+//                    dao.addDvd(title, currentDvd);
+//                    break;
+//                
+//                    io.print("Exited Edit Menu");
+//                    askAgain = false;
+//                    break;
+//                default:
+//                    unknownCommand();
+//
+//            }
+//
+//        }
+//        return currentDvd;
+//    }
 }

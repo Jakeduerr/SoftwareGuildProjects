@@ -5,6 +5,8 @@
  */
 package com.sg.dvdlibrary.dto;
 
+import java.util.Objects;
+
 /**
  *
  * @author jakeduerr
@@ -66,5 +68,52 @@ public class Dvd {
     public void setUserRating(String userRating) {
         this.userRating = userRating;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.title);
+        hash = 79 * hash + Objects.hashCode(this.releaseDate);
+        hash = 79 * hash + Objects.hashCode(this.mpaaRating);
+        hash = 79 * hash + Objects.hashCode(this.directorName);
+        hash = 79 * hash + Objects.hashCode(this.studio);
+        hash = 79 * hash + Objects.hashCode(this.userRating);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Dvd other = (Dvd) obj;
+        if (!Objects.equals(this.title, other.title)) {
+            return false;
+        }
+        if (!Objects.equals(this.releaseDate, other.releaseDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.mpaaRating, other.mpaaRating)) {
+            return false;
+        }
+        if (!Objects.equals(this.directorName, other.directorName)) {
+            return false;
+        }
+        if (!Objects.equals(this.studio, other.studio)) {
+            return false;
+        }
+        if (!Objects.equals(this.userRating, other.userRating)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }
