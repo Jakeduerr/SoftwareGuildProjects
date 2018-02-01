@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +64,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
     //method that loads all data from dvd and splits it into delimiter text
     private void loadLibrary() throws DvdLibraryDaoException {
         Scanner sc = null;
+        
         try {
             sc = new Scanner(new BufferedReader(new FileReader(LIBRARY_FILE)));
 
@@ -74,7 +76,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
             String currentLine = sc.nextLine();
             String[] lineParts = currentLine.split(DELIMITER);
             Dvd currentDvd = new Dvd(lineParts[0]);
-            currentDvd.setReleaseDate(lineParts[1]);
+            currentDvd.setReleaseDate(LocalDate.parse(lineParts[1]));
             currentDvd.setMpaaRating(lineParts[2]);
             currentDvd.setDirectorName(lineParts[3]);
             currentDvd.setStudio(lineParts[4]);
@@ -96,7 +98,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
             System.out.println("Can't find file: " + ex.getMessage());
         }
 
-        List<Dvd> dvdList = this.getAllDvds();
+        List<Dvd> dvdList = new ArrayList<>(dvds.values());
         for (Dvd currentDvd : dvdList) {
             out.println(currentDvd.getTitle() + DELIMITER
                     + currentDvd.getReleaseDate() + DELIMITER

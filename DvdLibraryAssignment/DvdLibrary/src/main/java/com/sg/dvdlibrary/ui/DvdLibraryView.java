@@ -6,6 +6,8 @@
 package com.sg.dvdlibrary.ui;
 
 import com.sg.dvdlibrary.dto.Dvd;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -39,14 +41,14 @@ public class DvdLibraryView {
     //asks user for info about dvd and places it in dvd object and value
     public Dvd getNewDvdInfo() {
         String title = io.readString("Please enter the DVD title: ");
-        String releaseDate = io.readString("Please enter the DVD release date: ");
+        String releaseDate = io.readString("Please enter the DVD release date (mm/dd/yyyy): ");
         String mpaaRating = io.readString("Please enter the DVD MPAA rating: ");
         String directorName = io.readString("Please enter the Director's Name: ");
         String studio = io.readString("Please enter the Studio's Name: ");
         String userRating = io.readString("Please enter your own personal rating of the DVD: "
                 + " (e.g. Hilarious comdedy movie!)");
         Dvd currentDvd = new Dvd(title);
-        currentDvd.setReleaseDate(releaseDate);
+        currentDvd.setReleaseDate(LocalDate.parse(releaseDate, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
         currentDvd.setMpaaRating(mpaaRating);
         currentDvd.setDirectorName(directorName);
         currentDvd.setStudio(studio);
@@ -68,7 +70,7 @@ public class DvdLibraryView {
     public void displayDvdList(List<Dvd> dvdList) {
         for (Dvd currentDvd : dvdList) {
             io.print("Tile: " + currentDvd.getTitle()
-                    + "  Release Date: " + currentDvd.getReleaseDate()
+                    + "  Release Date: " + currentDvd.getReleaseDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
                     + "  MPAA Rating: " + currentDvd.getMpaaRating()
                     + "  Director: " + currentDvd.getDirectorName()
                     + "  Studio: " + currentDvd.getStudio()
@@ -94,7 +96,7 @@ public class DvdLibraryView {
     public void displayDvd(Dvd dvd) {
         if (dvd != null) {
             io.print("Tile: " + dvd.getTitle());
-            io.print("Release Date: " + dvd.getReleaseDate());
+            io.print("Release Date: " + dvd.getReleaseDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
             io.print("MPAA Rating: " + dvd.getMpaaRating());
             io.print("Director: " + dvd.getDirectorName());
             io.print("Studio: " + dvd.getStudio());
@@ -104,9 +106,7 @@ public class DvdLibraryView {
         }
         io.readString("Please press enter to continue.");
     }
-
     
-
     public void displayRemoveDvdBanner() {
         io.print("!!== Remove DVD ==!!");
     }
@@ -141,14 +141,14 @@ public class DvdLibraryView {
 
     public Dvd getEditDvdInfo() {
         String title = io.readString("Please enter the NEW DVD title: ");
-        String releaseDate = io.readString("Please enter the NEW DVD release date: ");
+        String releaseDate = io.readString("Please enter the NEW DVD release date (mm/dd/yyyy): ");
         String mpaaRating = io.readString("Please enter the NEW DVD MPAA rating: ");
         String directorName = io.readString("Please enter the NEW Director's Name: ");
         String studio = io.readString("Please enter the NEW Studio's Name: ");
         String userRating = io.readString("Please enter your NEW personal rating of the DVD: "
                 + " (e.g. Hilarious comdedy movie!)");
         Dvd currentDvd = new Dvd(title);
-        currentDvd.setReleaseDate(releaseDate);
+        currentDvd.setReleaseDate(LocalDate.parse(releaseDate, DateTimeFormatter.ofPattern("MM/dd/yyyy")));
         currentDvd.setMpaaRating(mpaaRating);
         currentDvd.setDirectorName(directorName);
         currentDvd.setStudio(studio);
@@ -170,6 +170,9 @@ public class DvdLibraryView {
 
         return io.readInt("Please select from the choices ^ABOVE^ ", 1, 4);
     }
+}
+
+
 
 //    public int printMenuAndGetEditSelection() {
 //        io.print("What would you like to edit? ");
@@ -240,4 +243,4 @@ public class DvdLibraryView {
 //        }
 //        return currentDvd;
 //    }
-}
+
