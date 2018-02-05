@@ -1,0 +1,10 @@
+Coke::1.50::2
+Diet Coke::1.50::2
+Cherry Coke::1.50::2
+Mello Yello::1.50::2
+Monster Energy::2.00::2
+Amp Energy::2.00::2
+Gatorade::1.75::2
+Vitaminwater::1.75::2
+Apple Juice::1.75::2
+Orange Juice::1.75::2
