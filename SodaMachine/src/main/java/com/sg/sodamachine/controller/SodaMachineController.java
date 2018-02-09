@@ -5,14 +5,17 @@
  */
 package com.sg.sodamachine.controller;
 
-import com.sg.sodamachine.dao.SodaMachineDao;
 import com.sg.sodamachine.dao.SodaMachinePersistenceException;
-import com.sg.sodamachine.dao.SodaMachineDaoFileImpl;
+import com.sg.sodamachine.service.SodaMachineInsufficientFundsException;
+import com.sg.sodamachine.service.SodaMachineNoItemInventoryException;
 import com.sg.sodamachine.service.SodaMachineServiceLayer;
+import com.sg.sodamachine.service.SodaMachineTooMuchMoneyException;
+import com.sg.sodamachine.service.SodaMachineUnknownSodaException;
 import com.sg.sodamachine.sodamachine.dto.Soda;
 import com.sg.sodamachine.ui.SodaMachineView;
 import com.sg.sodamachine.ui.UserIO;
 import com.sg.sodamachine.ui.UserIOConsoleImpl;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -36,17 +39,15 @@ public class SodaMachineController {
         int menuSelection = 0;
         try {
             while (askAgain) {
-
+                view.displaySodaMenuBanner();
+                getSodaDisplay();
                 menuSelection = getMenuSelection();
 
                 switch (menuSelection) {
                     case 1:
-                        getSodaDisplay();
-                        break;
-                    case 2:
                         purchaseSoda();
                         break;
-                    case 3:
+                    case 2:
                         askAgain = false;
                         break;
                     default:
@@ -55,9 +56,35 @@ public class SodaMachineController {
 
             }
             exitMessage();
-        } catch (SodaMachinePersistenceException e) {
-            view.displayErrorMessage(e.getMessage());
+        } catch (SodaMachinePersistenceException
+                | SodaMachineTooMuchMoneyException
+                | SodaMachineInsufficientFundsException
+                | SodaMachineNoItemInventoryException
+                | SodaMachineUnknownSodaException ex) {
+            view.displayErrorMessage(ex.getMessage());
         }
+
+    }
+
+    private void purchaseSoda() throws SodaMachinePersistenceException,
+            SodaMachineTooMuchMoneyException,
+            SodaMachineInsufficientFundsException,
+            SodaMachineNoItemInventoryException,
+            SodaMachineUnknownSodaException {
+
+        view.displaySodaPurchaseBanner();
+        BigDecimal dollarLimit = new BigDecimal("100");
+        BigDecimal userInput = view.getMoneyAmount();
+        service.checkLimitOfMoney(userInput, dollarLimit);
+        String userSoda = view.getSodaSelection();
+        Soda soda = service.getSoda(userSoda);
+        service.checkSodaSelection(soda);
+        BigDecimal itemPrice = service.getSodaCost(userSoda);
+        service.checkInventory(userSoda);
+        service.updateSoda(userSoda);
+        service.checkUserInput(itemPrice, userInput);
+        BigDecimal[] changeResult = service.calculateChange(userInput, itemPrice);
+        view.displayPurchaseResult(changeResult);
 
     }
 
@@ -66,18 +93,9 @@ public class SodaMachineController {
     }
 
     private void getSodaDisplay() throws SodaMachinePersistenceException {
-        List<Soda> sodaList = service.getAllSoda();
-        view.displaySodasSelection(sodaList);
+        List<Soda> newList = service.getAllSoda();
+        view.displaySodasSelection(newList);
 
-    }
-
-    private void purchaseSoda() throws SodaMachinePersistenceException {
-        view.displaySodaPurchaseBanner();
-        List<Soda> sodaList = service.getAllSoda();
-        view.displaySodasSelection(sodaList);
-        String userSelection = view.displayMoneyAndGetSodaSelection();
-        
-        
     }
 
     private void exitMessage() {

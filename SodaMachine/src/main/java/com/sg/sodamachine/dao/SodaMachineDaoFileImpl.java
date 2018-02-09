@@ -5,15 +5,14 @@
  */
 package com.sg.sodamachine.dao;
 
+import com.sg.sodamachine.service.SodaMachineUnknownSodaException;
 import com.sg.sodamachine.sodamachine.dto.Soda;
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.Scanner;
  */
 public class SodaMachineDaoFileImpl implements SodaMachineDao {
 
-    public static final String SODA_FILE = "soda.txt";
+    public static final String SODA_FILE = "sodas.txt";
     public static final String DELIMITER = "::";
 
     private Map<String, Soda> sodas = new HashMap<>();
@@ -35,11 +34,10 @@ public class SodaMachineDaoFileImpl implements SodaMachineDao {
         Scanner scanner;
 
         try {
-
-            scanner = new Scanner(new BufferedReader(new FileReader(SODA_FILE)));
+            scanner = new Scanner(new FileReader(SODA_FILE));
         } catch (FileNotFoundException e) {
             throw new SodaMachinePersistenceException(
-                    "Could not load roster data into memory.", e);
+                    "File could not load.", e);
         }
 
         String currentLine;
@@ -51,14 +49,14 @@ public class SodaMachineDaoFileImpl implements SodaMachineDao {
             currentTokens = currentLine.split(DELIMITER);
 
             Soda currentSoda = new Soda(currentTokens[0]);
-            currentTokens[1] = BigDecimal.parseBigDecimal(currentSoda.getSodaCost());
-            currentTokens[2] = Integer.parseInt(currentSoda.getNumOfSoda());
-            
+            currentSoda.setSodaCost(new BigDecimal(currentTokens[1]));
+            currentSoda.setNumOfSoda(Integer.parseInt(currentTokens[2]));
 
             sodas.put(currentSoda.getSodaName(), currentSoda);
         }
 
         scanner.close();
+
     }
 
     private void writeSodaMachine() throws SodaMachinePersistenceException {
@@ -83,17 +81,9 @@ public class SodaMachineDaoFileImpl implements SodaMachineDao {
     }
 
     @Override
-    public Soda addSoda(String sodaName, Soda soda) throws SodaMachinePersistenceException {
-
-        Soda newSoda = sodas.put(sodaName, soda);
-        writeSodaMachine();
-        return newSoda;
-    }
-
-    @Override
     public List<Soda> getAllSoda() throws SodaMachinePersistenceException {
         loadSodaMachine();
-        return new ArrayList<Soda>(sodas.values());
+        return new ArrayList<>(sodas.values());
     }
 
     @Override
@@ -103,17 +93,35 @@ public class SodaMachineDaoFileImpl implements SodaMachineDao {
     }
 
     @Override
-    public Soda removeSoda(Soda sodaName) throws SodaMachinePersistenceException {
+    public void updateSoda(String sodaName) throws SodaMachinePersistenceException {
         loadSodaMachine();
-        Soda removedSoda = sodas.remove(sodaName);
+        int userPick = sodas.get(sodaName).getNumOfSoda();
+        userPick--;
+        sodas.get(sodaName).setNumOfSoda(userPick);
         writeSodaMachine();
-        return removedSoda;
     }
 
     @Override
-    public BigDecimal getSodaCost(BigDecimal sodaCost) throws SodaMachinePersistenceException {
+    public BigDecimal getSodaCost(String sodaName) throws SodaMachinePersistenceException {
         loadSodaMachine();
+        BigDecimal sodaCost = new BigDecimal("0.0");
+        for (Soda soda : sodas.values()) {
+            if (sodaName.equalsIgnoreCase(soda.getSodaName())) {
+                sodaCost = soda.getSodaCost();
+
+            }
+        }
         return sodaCost;
+    }
+
+    @Override
+    public void stockSoda() throws SodaMachinePersistenceException {
+        loadSodaMachine();
+        List<Soda> sodaList = new ArrayList<>(sodas.values());
+        sodaList.forEach((soda) -> {
+            soda.setNumOfSoda(2);
+        });
+        writeSodaMachine();
     }
 
 }

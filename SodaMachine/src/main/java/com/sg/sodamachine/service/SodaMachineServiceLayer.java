@@ -16,16 +16,25 @@ import java.util.List;
  */
 public interface SodaMachineServiceLayer {
     
-    void addSoda(Soda soda) throws SodaMachineInsufficientFundsException, 
-            SodaMachineNoItemInventoryException, 
-            SodaMachinePersistenceException;
+    BigDecimal[] calculateChange(BigDecimal userInput, BigDecimal itemPrice);
+    
+    boolean checkLimitOfMoney(BigDecimal userInput, BigDecimal dollarLimit) throws SodaMachineTooMuchMoneyException;
+    
+    boolean checkUserInput(BigDecimal itemPrice, BigDecimal userInput) throws SodaMachinePersistenceException, 
+            SodaMachineInsufficientFundsException;
+    
+    void checkSodaSelection(Soda soda) throws SodaMachinePersistenceException, 
+            SodaMachineUnknownSodaException;
+    
+    boolean checkInventory(String sodaName) throws SodaMachinePersistenceException, 
+            SodaMachineNoItemInventoryException;
     
     List<Soda> getAllSoda() throws SodaMachinePersistenceException;
     
     Soda getSoda(String sodaName) throws SodaMachinePersistenceException;
     
-    Soda removeSoda(String sodaName) throws SodaMachinePersistenceException;
+    void updateSoda(String sodaName) throws SodaMachinePersistenceException;
     
-    BigDecimal getSodaCost(BigDecimal sodaCost) throws SodaMachinePersistenceException;
+    BigDecimal getSodaCost(String sodaName) throws SodaMachinePersistenceException;
     
 }

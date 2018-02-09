@@ -5,8 +5,6 @@
  */
 package com.sg.sodamachine.dao;
 
-import com.sg.sodamachine.service.SodaMachineInsufficientFundsException;
-import com.sg.sodamachine.service.SodaMachineNoItemInventoryException;
 import com.sg.sodamachine.sodamachine.dto.Soda;
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,17 +14,14 @@ import java.util.List;
  * @author jakeduerr
  */
 public interface SodaMachineDao {
+
+    List<Soda> getAllSoda() throws SodaMachinePersistenceException;
+
+    Soda getSoda(String sodaName) throws SodaMachinePersistenceException;
+
+    void updateSoda(String sodaName) throws SodaMachinePersistenceException;
     
-    public Soda addSoda(String sodaName, Soda soda) throws SodaMachineInsufficientFundsException, 
-            SodaMachineNoItemInventoryException, 
-            SodaMachinePersistenceException;
-    
-    public List<Soda> getAllSoda() throws SodaMachinePersistenceException;
-    
-    public Soda getSoda(String sodaName) throws SodaMachinePersistenceException;
-    
-    public Soda removeSoda(Soda sodaName) throws SodaMachinePersistenceException;
-    
-    public BigDecimal getSodaCost(BigDecimal sodaCost) throws SodaMachinePersistenceException;
-    
+    BigDecimal getSodaCost(String sodaName) throws SodaMachinePersistenceException;
+
+    void stockSoda() throws SodaMachinePersistenceException;
 }

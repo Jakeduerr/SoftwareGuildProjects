@@ -19,16 +19,16 @@ import com.sg.sodamachine.ui.UserIOConsoleImpl;
  * @author jakeduerr
  */
 public class App {
-    
+
     public static void main(String[] args) {
-        
+
         UserIO myIo = new UserIOConsoleImpl();
         SodaMachineView myView = new SodaMachineView(myIo);
         SodaMachineDao myDao = new SodaMachineDaoFileImpl();
         SodaMachineServiceLayer myService = new SodaMachineServiceLayerImpl(myDao);
         SodaMachineController controller = new SodaMachineController(myService, myView);
         controller.run();
-        
+
     }
-    
+
 }
