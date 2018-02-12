@@ -5,6 +5,8 @@
  */
 package com.sg.sodamachine.service;
 
+import com.sg.sodamachine.dao.SodaMachineAuditDao;
+import com.sg.sodamachine.dao.SodaMachineAuditDaoStubImpl;
 import com.sg.sodamachine.dao.SodaMachineDao;
 import com.sg.sodamachine.dao.SodaMachineDaoStubImpl;
 import java.math.BigDecimal;
@@ -14,6 +16,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -21,13 +25,16 @@ import static org.junit.Assert.*;
  */
 public class SodaMachineServiceLayerTest {
 
-    private SodaMachineServiceLayer service;
+    SodaMachineServiceLayer service;
 
     public SodaMachineServiceLayerTest() {
-        SodaMachineDao dao = new SodaMachineDaoStubImpl();
+//        SodaMachineDao dao = new SodaMachineDaoStubImpl();
+//        SodaMachineAuditDao auditDao = new SodaMachineAuditDaoStubImpl();
+//
+//        service = new SodaMachineServiceLayerImpl(dao, auditDao);
 
-        service = new SodaMachineServiceLayerImpl(dao);
-
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        service = ctx.getBean("serviceLayer", SodaMachineServiceLayer.class);
     }
 
     @BeforeClass

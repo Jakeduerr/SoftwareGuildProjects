@@ -5,6 +5,7 @@
  */
 package com.sg.sodamachine.service;
 
+import com.sg.sodamachine.dao.SodaMachineAuditDao;
 import com.sg.sodamachine.dao.SodaMachineDao;
 import com.sg.sodamachine.dao.SodaMachinePersistenceException;
 import com.sg.sodamachine.sodamachine.dto.Soda;
@@ -19,12 +20,13 @@ import java.util.Map;
  * @author jakeduerr
  */
 public class SodaMachineServiceLayerImpl implements SodaMachineServiceLayer {
+    
+    private SodaMachineAuditDao auditDao;
+    private SodaMachineDao dao;
 
-    SodaMachineDao dao;
-
-    public SodaMachineServiceLayerImpl(SodaMachineDao dao) {
+    public SodaMachineServiceLayerImpl(SodaMachineDao dao, SodaMachineAuditDao auditDao) {
         this.dao = dao;
-
+        this.auditDao = auditDao;
     }
 
     @Override
@@ -68,14 +70,15 @@ public class SodaMachineServiceLayerImpl implements SodaMachineServiceLayer {
     }
 
     @Override
-    public boolean checkUserInput(BigDecimal itemPrice, BigDecimal userInput)
+    public void checkUserInput(BigDecimal itemPrice, BigDecimal userInput)
             throws SodaMachinePersistenceException,
             SodaMachineInsufficientFundsException {
 
         if (itemPrice.compareTo(userInput) > 0) {
             throw new SodaMachineInsufficientFundsException("Not enough money, please enter more. You entered " + userInput + "¢.");
+            
         }
-        return true;
+        
     }
 
     @Override
@@ -88,14 +91,14 @@ public class SodaMachineServiceLayerImpl implements SodaMachineServiceLayer {
     }
 
     @Override
-    public boolean checkInventory(String sodaName) throws SodaMachinePersistenceException, SodaMachineNoItemInventoryException {
+    public void checkInventory(String sodaName) throws SodaMachinePersistenceException, SodaMachineNoItemInventoryException {
 
         int checkInt = dao.getSoda(sodaName).getNumOfSoda();
         if (checkInt <= 0) {
             throw new SodaMachineNoItemInventoryException("Sorry, we are out of that soda.");
 
         }
-        return true;
+        
     }
 
     @Override

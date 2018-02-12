@@ -81,8 +81,8 @@ public class SodaMachineController {
         service.checkSodaSelection(soda);
         BigDecimal itemPrice = service.getSodaCost(userSoda);
         service.checkInventory(userSoda);
-        service.updateSoda(userSoda);
         service.checkUserInput(itemPrice, userInput);
+        service.updateSoda(userSoda);
         BigDecimal[] changeResult = service.calculateChange(userInput, itemPrice);
         view.displayPurchaseResult(changeResult);
 

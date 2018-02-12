@@ -1,4 +1,4 @@
-Diet Coke::50::0
+Diet Coke::50::2
 Amp Energy::100::2
 Coke::50::0
 Gatorade::75::2
@@ -7,4 +7,4 @@ Orange Juice::75::2
 Cherry Coke::50::2
 Monster Energy::100::2
 Vitaminwater::75::2
-Mello Yello::50::0
+Mello Yello::50::2

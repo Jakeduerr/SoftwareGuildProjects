@@ -20,13 +20,13 @@ public interface SodaMachineServiceLayer {
     
     boolean checkLimitOfMoney(BigDecimal userInput, BigDecimal dollarLimit) throws SodaMachineTooMuchMoneyException;
     
-    boolean checkUserInput(BigDecimal itemPrice, BigDecimal userInput) throws SodaMachinePersistenceException, 
+    void checkUserInput(BigDecimal itemPrice, BigDecimal userInput) throws SodaMachinePersistenceException, 
             SodaMachineInsufficientFundsException;
     
     void checkSodaSelection(Soda soda) throws SodaMachinePersistenceException, 
             SodaMachineUnknownSodaException;
     
-    boolean checkInventory(String sodaName) throws SodaMachinePersistenceException, 
+    void checkInventory(String sodaName) throws SodaMachinePersistenceException, 
             SodaMachineNoItemInventoryException;
     
     List<Soda> getAllSoda() throws SodaMachinePersistenceException;
