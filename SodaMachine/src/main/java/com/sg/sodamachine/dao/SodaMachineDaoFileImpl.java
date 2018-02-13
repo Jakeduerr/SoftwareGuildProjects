@@ -6,7 +6,7 @@
 package com.sg.sodamachine.dao;
 
 import com.sg.sodamachine.service.SodaMachineUnknownSodaException;
-import com.sg.sodamachine.sodamachine.dto.Soda;
+import com.sg.sodamachine.dto.Soda;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;

@@ -5,7 +5,7 @@
  */
 package com.sg.sodamachine.dao;
 
-import com.sg.sodamachine.sodamachine.dto.Soda;
+import com.sg.sodamachine.dto.Soda;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class SodaMachineDaoStubImpl implements SodaMachineDao {
 
     @Override
     public void stockSoda() throws SodaMachinePersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //do nothing
     }
 
 }

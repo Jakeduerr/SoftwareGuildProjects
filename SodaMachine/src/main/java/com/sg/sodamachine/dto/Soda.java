@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.sg.sodamachine.sodamachine.dto;
+package com.sg.sodamachine.dto;
 
 import java.math.BigDecimal;
 import java.util.Objects;

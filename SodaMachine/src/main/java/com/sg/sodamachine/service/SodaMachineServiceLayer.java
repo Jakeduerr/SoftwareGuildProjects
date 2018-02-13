@@ -6,7 +6,7 @@
 package com.sg.sodamachine.service;
 
 import com.sg.sodamachine.dao.SodaMachinePersistenceException;
-import com.sg.sodamachine.sodamachine.dto.Soda;
+import com.sg.sodamachine.dto.Soda;
 import java.math.BigDecimal;
 import java.util.List;
 

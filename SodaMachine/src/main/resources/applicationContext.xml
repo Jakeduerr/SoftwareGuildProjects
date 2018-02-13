@@ -39,15 +39,17 @@
     
     <aop:config>
         <aop:aspect ref="loggingAdvice">
-            <aop:after-throwing 
+            <aop:after-throwing
                 method="createAuditEntry"
                 pointcut="execution(* com.sg.sodamachine.service.SodaMachineServiceLayer.checkInventory(..))"
+                throwing="ex"
             />
             <aop:after-throwing
-                method="createAuditEntry2"
+                method="createAuditEntry"
                 pointcut="execution(* com.sg.sodamachine.service.SodaMachineServiceLayer.checkUserInput(..))"
+                throwing="ex"
             />
         </aop:aspect>
     </aop:config>
-     
+
 </beans>

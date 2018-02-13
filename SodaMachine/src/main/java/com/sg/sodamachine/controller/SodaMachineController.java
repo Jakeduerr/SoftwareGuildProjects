@@ -11,7 +11,7 @@ import com.sg.sodamachine.service.SodaMachineNoItemInventoryException;
 import com.sg.sodamachine.service.SodaMachineServiceLayer;
 import com.sg.sodamachine.service.SodaMachineTooMuchMoneyException;
 import com.sg.sodamachine.service.SodaMachineUnknownSodaException;
-import com.sg.sodamachine.sodamachine.dto.Soda;
+import com.sg.sodamachine.dto.Soda;
 import com.sg.sodamachine.ui.SodaMachineView;
 import com.sg.sodamachine.ui.UserIO;
 import com.sg.sodamachine.ui.UserIOConsoleImpl;

@@ -19,19 +19,19 @@ public class SodaMachineAuditDaoFileImpl implements SodaMachineAuditDao {
     public static final String AUDIT_FILE = "audit.txt";
 
     @Override
-    public void writeAuditEntry(String entry) throws SodaMachinePersistenceException {
+    public void writeAuditEntry(String entry, Throwable ex) throws SodaMachinePersistenceException {
 
         PrintWriter out;
 
         try {
             out = new PrintWriter(new FileWriter(AUDIT_FILE, true));
 
-        } catch (IOException ex) {
-            throw new SodaMachinePersistenceException("Could not persist audit information.", ex);
+        } catch (IOException e) {
+            throw new SodaMachinePersistenceException("Could not persist audit information.", e);
         }
         
         LocalDateTime timestamp = LocalDateTime.now();
-        out.println(timestamp.toString() + " : " + entry);
+        out.println(timestamp.toString() + " : " + entry + " : " + ex.getClass().getName());
         out.flush();
 
     }

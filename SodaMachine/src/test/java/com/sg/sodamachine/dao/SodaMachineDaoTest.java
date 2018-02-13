@@ -5,7 +5,7 @@
  */
 package com.sg.sodamachine.dao;
 
-import com.sg.sodamachine.sodamachine.dto.Soda;
+import com.sg.sodamachine.dto.Soda;
 import java.math.BigDecimal;
 import org.junit.After;
 import org.junit.AfterClass;

@@ -12,7 +12,7 @@ package com.sg.sodamachine.dao;
 public class SodaMachineAuditDaoStubImpl implements SodaMachineAuditDao {
 
     @Override
-    public void writeAuditEntry(String entry) throws SodaMachinePersistenceException {
+    public void writeAuditEntry(String entry, Throwable ex) throws SodaMachinePersistenceException {
         //do nothing
     }
     

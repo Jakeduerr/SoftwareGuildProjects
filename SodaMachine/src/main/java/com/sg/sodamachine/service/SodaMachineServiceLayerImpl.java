@@ -8,7 +8,7 @@ package com.sg.sodamachine.service;
 import com.sg.sodamachine.dao.SodaMachineAuditDao;
 import com.sg.sodamachine.dao.SodaMachineDao;
 import com.sg.sodamachine.dao.SodaMachinePersistenceException;
-import com.sg.sodamachine.sodamachine.dto.Soda;
+import com.sg.sodamachine.dto.Soda;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;

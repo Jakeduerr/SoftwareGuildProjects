@@ -11,6 +11,6 @@ package com.sg.sodamachine.dao;
  */
 public interface SodaMachineAuditDao {
     
-        public void writeAuditEntry(String entry) throws SodaMachinePersistenceException;
+        public void writeAuditEntry(String entry, Throwable ex) throws SodaMachinePersistenceException;
 
 }
