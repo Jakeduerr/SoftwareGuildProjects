@@ -19,42 +19,46 @@ import java.util.List;
  */
 public interface SwgFlooringServiceLayer {
     
-    boolean getComfirmation(String userChoice) throws SwgFlooringPersistenceException;
-    
-    void setNewOrderNumber(Order order) throws SwgFlooringPersistenceException;
-    
-    boolean validateOrderExists(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException;
-    
-    BigDecimal getProductTypeAndSetCost(String userMaterial) throws SwgFlooringPersistenceException;
-    
-    BigDecimal getProductTypeAndSetLaborCost(String userMaterial) throws SwgFlooringPersistenceException;
-    
-    BigDecimal calculateMaterialCost(Product product, BigDecimal areaOfMaterial) 
+    BigDecimal calculateMaterialCost(Product product, BigDecimal areaOfMaterial)
+            throws SwgFlooringPersistenceException;
+
+    BigDecimal calculateLaborCost(Product product, BigDecimal areaOfMaterial)
+            throws SwgFlooringPersistenceException;
+
+    BigDecimal calculateTotalTax(BigDecimal materialCost, BigDecimal laborCost, Tax tax)
+            throws SwgFlooringPersistenceException;
+
+    BigDecimal calculateTotalCost(BigDecimal materialCost, BigDecimal laborCost, BigDecimal tax)
             throws SwgFlooringPersistenceException;
     
-    BigDecimal calculateLaborCost(Product product, BigDecimal areaOfMaterial) 
-            throws SwgFlooringPersistenceException;
+    boolean checkProductInput(String productType) throws SwgFlooringPersistenceException;
     
-    BigDecimal calculateTotalTax(BigDecimal materialCost, BigDecimal laborCost, Tax tax) 
-            throws SwgFlooringPersistenceException;
+    boolean checkStateInput(String state) throws SwgFlooringPersistenceException;
     
-    BigDecimal calculateTotalCost(BigDecimal materialCost, BigDecimal laborCost, BigDecimal tax) 
-            throws SwgFlooringPersistenceException;
+    boolean checkAreaOfMaterial(BigDecimal areaOfMaterial) throws SwgFlooringPersistenceException;
     
+    boolean checkOrdersByDate(LocalDate orderdate) throws SwgFlooringPersistenceException;
+    
+    boolean checkOrders(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException;
+
     List<Product> getProductsList() throws SwgFlooringPersistenceException;
-    
+
     Product getProduct(String productType) throws SwgFlooringPersistenceException;
-    
+
     List<Tax> getTaxesList() throws SwgFlooringPersistenceException;
-    
+
     Tax getTax(String state) throws SwgFlooringPersistenceException;
     
+    void addNewOrder(Order order) throws SwgFlooringPersistenceException;
+
+    void saveAllOrders() throws SwgFlooringPersistenceException;
+
+    int setOrderNumber(LocalDate orderDate) throws SwgFlooringPersistenceException;
+
     List<Order> listOrdersByDate(LocalDate orderDate) throws SwgFlooringPersistenceException;
 
     Order getOrder(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException;
-    
+
     void removeOrder(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException;
-    
-   
-    
+
 }

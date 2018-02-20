@@ -17,26 +17,27 @@ import java.util.List;
  * @author jakeduerr
  */
 public interface SwgFlooringDao {
-    
+
     List<Product> getProductsList() throws SwgFlooringPersistenceException;
-    
+
     Product getProduct(String productType) throws SwgFlooringPersistenceException;
-    
+
     List<Tax> getTaxesList() throws SwgFlooringPersistenceException;
 
     Tax getTax(String state) throws SwgFlooringPersistenceException;
-    
-    
-    
+
     int setOrderNumber(LocalDate orderDate) throws SwgFlooringPersistenceException;
-    
+
+    void addNewOrder(Order order) throws SwgFlooringPersistenceException;
+
+    void saveOrder(List<LocalDate> orderDateList) throws SwgFlooringPersistenceException;
+
     List<LocalDate> listAllDates() throws SwgFlooringPersistenceException;
-    
+
     List<Order> listOrdersByDate(LocalDate orderDate) throws SwgFlooringPersistenceException;
-    
+
     Order getOrder(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException;
-    
+
     void removeOrder(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException;
-    
-    
+
 }

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -35,14 +36,23 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
     private List<Order> orders = new ArrayList<>();
     private List<Product> products = new ArrayList<>();
     private List<Tax> taxes = new ArrayList<>();
+    private List<LocalDate> orderDateList = new ArrayList<>();
 
     private void loadSwgFlooring(LocalDate orderDate) throws SwgFlooringPersistenceException {
+
+        List<LocalDate> allOrderDates = listAllDates();
+        for (LocalDate localDate : allOrderDates) {
+            if (orderDate.equals(localDate)) {
+                return;
+            }
+        }
+
         Scanner scanner;
         String orderDateFile = "Orders_" + (orderDate.format(DateTimeFormatter.ofPattern("MMddyyyy"))) + ".txt";
         try {
             scanner = new Scanner(new FileReader(orderDateFile));
-        } catch (FileNotFoundException e) {
-            throw new SwgFlooringPersistenceException("File could not load.", e);
+        } catch (FileNotFoundException ex) {
+            throw new SwgFlooringPersistenceException("File could not load.", ex);
         }
 
         while (scanner.hasNextLine()) {
@@ -71,8 +81,8 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
             currentOrder.setProduct(product);
 
             currentOrder.setMaterialCost(new BigDecimal(currentTokens[8]));
-            currentOrder.setTotalTax(new BigDecimal(currentTokens[9]));
-            currentOrder.setTotalLaborCost(new BigDecimal(currentTokens[10]));
+            currentOrder.setTotalLaborCost(new BigDecimal(currentTokens[9]));
+            currentOrder.setTotalTax(new BigDecimal(currentTokens[10]));
             currentOrder.setTotalCost(new BigDecimal(currentTokens[11]));
 
             orders.add(currentOrder);
@@ -88,9 +98,9 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
 
         try {
             scanner = new Scanner(new FileReader("Products.txt"));
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ex) {
             throw new SwgFlooringPersistenceException(
-                    "File could not load.", e);
+                    "File could not load.", ex);
         }
 
         String currentLine;
@@ -118,9 +128,9 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
 
         try {
             scanner = new Scanner(new FileReader("Taxes.txt"));
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException ex) {
             throw new SwgFlooringPersistenceException(
-                    "File could not load.", e);
+                    "File could not load.", ex);
         }
 
         String currentLine;
@@ -152,8 +162,8 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
         try {
             out = new PrintWriter(new FileWriter(writeOrderDateFile));
 
-        } catch (IOException e) {
-            System.out.println("Can't find file: " + e.getMessage());
+        } catch (IOException ex) {
+            System.out.println("Can't find file: " + ex.getMessage());
         }
 
         for (Order currentOrder : newList) {
@@ -168,7 +178,7 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
                     + currentOrder.getMaterialCost() + DELIMITER
                     + currentOrder.getTotalLaborCost() + DELIMITER
                     + currentOrder.getTotalTax() + DELIMITER
-                    + currentOrder.getTotalCost() + DELIMITER);
+                    + currentOrder.getTotalCost());
 
             out.flush();
         }
@@ -202,22 +212,23 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
 
     @Override
     public Tax getTax(String state) throws SwgFlooringPersistenceException {
-        loadSwgFlooringProduct();
-        for (Tax tax : taxes) {
-            if (state.equalsIgnoreCase(tax.getState())) {
-                return tax;
-            }
+        loadSwgFlooringTaxes();
+        Tax tax = taxes.stream()
+                .filter(t -> t.getState().equalsIgnoreCase(state))
+                .findFirst().orElse(null);
 
-        }
-        return null;
+        return tax;
 
     }
 
     @Override
-    public int setOrderNumber(LocalDate orderDate) throws SwgFlooringPersistenceException {
+    public int setOrderNumber(LocalDate orderDate) {
         int newOrderNumber;
-        loadSwgFlooring(orderDate);
-
+        try {
+            loadSwgFlooring(orderDate);
+        } catch (SwgFlooringPersistenceException ex) {
+            return 1;
+        }
         Order orderWithMaxNum = orders.stream()
                 .max(Comparator.comparing(Order::getOrderNumber))
                 .get();
@@ -229,32 +240,26 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
 
     @Override
     public List<LocalDate> listAllDates() throws SwgFlooringPersistenceException {
-        List<LocalDate> orderDateList = new ArrayList<>();
+        List<LocalDate> dateList = new ArrayList<>();
         for (Order order : orders) {
-            orderDateList.add(order.getOrderDate());
-            
-        }
-        return orderDateList;
-    }
-    
-//    @Override
-//    public void saveOrder(LocalDate orderDate, List<LocalDate> orderDateList) throws SwgFlooringPersistenceException {
-//        int newOrderNumber = setOrderNumber(orderDate);
-//        orderDateList = listAllDates();
-//        for (LocalDate localDate : orderDateList) {
-//            if(orderDate == localDate) {
-//                
-//                writeSwgFlooring(orderDate);
-//            }
-//            
-//        }
-//        
-//        
-//        
-//        
-//        
-//    }
+            dateList.add(order.getOrderDate());
 
+        }
+        return dateList;
+    }
+
+    @Override
+    public void addNewOrder(Order order) throws SwgFlooringPersistenceException {
+        orders.add(order);
+    }
+
+    @Override
+    public void saveOrder(List<LocalDate> orderDateList) throws SwgFlooringPersistenceException {
+        for (LocalDate localDate : orderDateList) {
+            writeSwgFlooring(localDate);
+        }
+
+    }
 
     @Override
     public List<Order> listOrdersByDate(LocalDate orderDate) throws SwgFlooringPersistenceException {
@@ -262,7 +267,10 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
         List<Order> orderList = new ArrayList<>();
         for (Order order : orders) {
 
-            if (order.getOrderDate().equals(orderDate)) {
+            if (!order.getOrderDate().equals(orderDate)) {
+                return null;
+                
+            } else {
                 orderList.add(order);
             }
         }
@@ -274,7 +282,7 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
         loadSwgFlooring(orderDate);
         for (Order order : orders) {
 
-            if (order.getOrderNumber() == (orderNumber)) {
+            if (order.getOrderDate().equals(orderDate) && order.getOrderNumber() == (orderNumber)) {
                 return order;
             }
         }
@@ -288,10 +296,9 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
         Iterator<Order> itr = orders.iterator();
         while (itr.hasNext()) {
             Order order = itr.next();
-            if (order.getOrderNumber() == (orderNumber)) {
+            if (order.getOrderDate().equals(orderDate) && order.getOrderNumber() == (orderNumber)) {
                 itr.remove();
             }
         }
     }
-
 }

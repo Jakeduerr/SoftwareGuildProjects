@@ -7,6 +7,7 @@ package com.sg.swgflooring.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  *
@@ -109,7 +110,65 @@ public class Order {
     public void setTax(Tax tax) {
         this.tax = tax;
     }
-    
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.orderNumber;
+        hash = 23 * hash + Objects.hashCode(this.customerName);
+        hash = 23 * hash + Objects.hashCode(this.areaOfMaterial);
+        hash = 23 * hash + Objects.hashCode(this.materialCost);
+        hash = 23 * hash + Objects.hashCode(this.totalLaborCost);
+        hash = 23 * hash + Objects.hashCode(this.totalTax);
+        hash = 23 * hash + Objects.hashCode(this.totalCost);
+        hash = 23 * hash + Objects.hashCode(this.orderDate);
+        hash = 23 * hash + Objects.hashCode(this.product);
+        hash = 23 * hash + Objects.hashCode(this.tax);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Order other = (Order) obj;
+        if (this.orderNumber != other.orderNumber) {
+            return false;
+        }
+        if (!Objects.equals(this.customerName, other.customerName)) {
+            return false;
+        }
+        if (!Objects.equals(this.areaOfMaterial, other.areaOfMaterial)) {
+            return false;
+        }
+        if (!Objects.equals(this.materialCost, other.materialCost)) {
+            return false;
+        }
+        if (!Objects.equals(this.totalLaborCost, other.totalLaborCost)) {
+            return false;
+        }
+        if (!Objects.equals(this.totalTax, other.totalTax)) {
+            return false;
+        }
+        if (!Objects.equals(this.totalCost, other.totalCost)) {
+            return false;
+        }
+        if (!Objects.equals(this.orderDate, other.orderDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.product, other.product)) {
+            return false;
+        }
+        if (!Objects.equals(this.tax, other.tax)) {
+            return false;
+        }
+        return true;
+    }
 }

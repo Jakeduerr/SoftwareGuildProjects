@@ -5,10 +5,18 @@
  */
 package com.sg.swgflooring.dao;
 
+import com.sg.swgflooring.dao.SwgFlooringAuditDao;
+import com.sg.swgflooring.dao.SwgFlooringPersistenceException;
+
 /**
  *
  * @author jakeduerr
  */
-public class SwgFlooringAuditDaoStubImpl {
+public class SwgFlooringAuditDaoStubImpl implements SwgFlooringAuditDao {
+
+    @Override
+    public void writeAuditEntry(String entry, Throwable ex) throws SwgFlooringPersistenceException {
+        //do nothing
+    }
     
 }

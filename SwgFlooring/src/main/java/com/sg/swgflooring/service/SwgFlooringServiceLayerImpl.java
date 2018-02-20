@@ -31,31 +31,6 @@ public class SwgFlooringServiceLayerImpl implements SwgFlooringServiceLayer {
     }
 
     @Override
-    public boolean getComfirmation(String userChoice) throws SwgFlooringPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setNewOrderNumber(Order order) throws SwgFlooringPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean validateOrderExists(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BigDecimal getProductTypeAndSetCost(String userMaterial) throws SwgFlooringPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public BigDecimal getProductTypeAndSetLaborCost(String userMaterial) throws SwgFlooringPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public BigDecimal calculateMaterialCost(Product product, BigDecimal areaOfMaterial) throws SwgFlooringPersistenceException {
         BigDecimal costPerSquareFoot = product.getCostPerSquareFoot();
         BigDecimal materialCost = (costPerSquareFoot).multiply(areaOfMaterial);
@@ -74,7 +49,8 @@ public class SwgFlooringServiceLayerImpl implements SwgFlooringServiceLayer {
     @Override
     public BigDecimal calculateTotalTax(BigDecimal materialCost, BigDecimal laborCost, Tax tax) throws SwgFlooringPersistenceException {
         BigDecimal taxRate = tax.getTaxRate();
-        BigDecimal totalTax = materialCost.add(laborCost).multiply(taxRate);
+        BigDecimal matAndLabCost = (materialCost).add(laborCost);
+        BigDecimal totalTax = (matAndLabCost).multiply(taxRate).divide(new BigDecimal("100"));
         return totalTax;
     }
 
@@ -83,7 +59,48 @@ public class SwgFlooringServiceLayerImpl implements SwgFlooringServiceLayer {
         BigDecimal totalCost = materialCost.add(laborCost).add(tax);
         return totalCost;
     }
-    
+
+    @Override
+    public boolean checkProductInput(String productType) throws SwgFlooringPersistenceException {
+        if (null == dao.getProduct(productType)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean checkStateInput(String state) throws SwgFlooringPersistenceException {
+        if (null == dao.getTax(state)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean checkAreaOfMaterial(BigDecimal areaOfMaterial) throws SwgFlooringPersistenceException {
+        BigDecimal limit = new BigDecimal("0.0");
+        if (limit.compareTo(areaOfMaterial) > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean checkOrdersByDate(LocalDate orderDate) throws SwgFlooringPersistenceException {
+        if (null == dao.listOrdersByDate(orderDate)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean checkOrders(LocalDate orderDate, int orderNumber) throws SwgFlooringPersistenceException {
+        if (null == dao.getOrder(orderDate, orderNumber)) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public List<Product> getProductsList() throws SwgFlooringPersistenceException {
         return dao.getProductsList();
@@ -92,17 +109,33 @@ public class SwgFlooringServiceLayerImpl implements SwgFlooringServiceLayer {
     @Override
     public Product getProduct(String productType) throws SwgFlooringPersistenceException {
         return dao.getProduct(productType);
-
     }
-    
+
     @Override
     public List<Tax> getTaxesList() throws SwgFlooringPersistenceException {
         return dao.getTaxesList();
     }
-    
+
     @Override
     public Tax getTax(String state) throws SwgFlooringPersistenceException {
         return dao.getTax(state);
+    }
+
+    @Override
+    public void addNewOrder(Order order) throws SwgFlooringPersistenceException {
+        dao.addNewOrder(order);
+    }
+
+    @Override
+    public void saveAllOrders() throws SwgFlooringPersistenceException {
+        List<LocalDate> datesOfOrders = dao.listAllDates();
+        dao.saveOrder(datesOfOrders);
+
+    }
+
+    @Override
+    public int setOrderNumber(LocalDate orderDate) throws SwgFlooringPersistenceException {
+        return dao.setOrderNumber(orderDate);
     }
 
     @Override
