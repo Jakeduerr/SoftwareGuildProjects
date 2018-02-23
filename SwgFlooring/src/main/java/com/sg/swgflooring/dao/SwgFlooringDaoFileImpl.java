@@ -93,65 +93,66 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
     }
 
     private void loadSwgFlooringProduct() throws SwgFlooringPersistenceException {
-        
-        Scanner scanner;
+        if (products.isEmpty()) {
+            Scanner scanner;
 
-        try {
-            scanner = new Scanner(new FileReader("Products.txt"));
-        } catch (FileNotFoundException ex) {
-            throw new SwgFlooringPersistenceException(
-                    "File could not load.", ex);
+            try {
+                scanner = new Scanner(new FileReader("Products.txt"));
+            } catch (FileNotFoundException ex) {
+                throw new SwgFlooringPersistenceException(
+                        "File could not load.", ex);
+            }
+
+            String currentLine;
+            String[] currentTokens;
+            while (scanner.hasNextLine()) {
+
+                currentLine = scanner.nextLine();
+
+                currentTokens = currentLine.split(DELIMITER);
+
+                Product currentProduct = new Product();
+                currentProduct.setProductType(currentTokens[0]);
+                currentProduct.setCostPerSquareFoot(new BigDecimal(currentTokens[1]));
+                currentProduct.setLaborCostPerSquareFoot(new BigDecimal(currentTokens[2]));
+
+                products.add(currentProduct);
+            }
+
+            scanner.close();
         }
-
-        String currentLine;
-        String[] currentTokens;
-        while (scanner.hasNextLine()) {
-
-            currentLine = scanner.nextLine();
-
-            currentTokens = currentLine.split(DELIMITER);
-
-            Product currentProduct = new Product();
-            currentProduct.setProductType(currentTokens[0]);
-            currentProduct.setCostPerSquareFoot(new BigDecimal(currentTokens[1]));
-            currentProduct.setLaborCostPerSquareFoot(new BigDecimal(currentTokens[2]));
-
-            products.add(currentProduct);
-        }
-
-        scanner.close();
-
     }
 
     private void loadSwgFlooringTaxes() throws SwgFlooringPersistenceException {
-        Scanner scanner;
+        if (taxes.isEmpty()) {
+            Scanner scanner;
 
-        try {
-            scanner = new Scanner(new FileReader("Taxes.txt"));
-        } catch (FileNotFoundException ex) {
-            throw new SwgFlooringPersistenceException(
-                    "File could not load.", ex);
+            try {
+                scanner = new Scanner(new FileReader("Taxes.txt"));
+            } catch (FileNotFoundException ex) {
+                throw new SwgFlooringPersistenceException(
+                        "File could not load.", ex);
+            }
+
+            String currentLine;
+            String[] currentTokens;
+            while (scanner.hasNextLine()) {
+
+                currentLine = scanner.nextLine();
+
+                currentTokens = currentLine.split(DELIMITER);
+
+                Tax currentTax = new Tax();
+                currentTax.setState(currentTokens[0]);
+                currentTax.setTaxRate(new BigDecimal(currentTokens[1]));
+
+                taxes.add(currentTax);
+            }
+
+            scanner.close();
         }
-
-        String currentLine;
-        String[] currentTokens;
-        while (scanner.hasNextLine()) {
-
-            currentLine = scanner.nextLine();
-
-            currentTokens = currentLine.split(DELIMITER);
-
-            Tax currentTax = new Tax();
-            currentTax.setState(currentTokens[0]);
-            currentTax.setTaxRate(new BigDecimal(currentTokens[1]));
-
-            taxes.add(currentTax);
-        }
-
-        scanner.close();
-
     }
-    
+
     private void loadTrainingOrProduction() throws SwgFlooringPersistenceException {
         Scanner scanner;
 
@@ -161,9 +162,9 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
             throw new SwgFlooringPersistenceException(
                     "File could not load.", ex);
         }
-        
+
         String value = scanner.next();
-        if(value.equals("true")) {
+        if (value.equals("true")) {
             isTrainingMode = true;
         }
     }
@@ -208,13 +209,8 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
 
     @Override
     public List<Product> getProductsList() throws SwgFlooringPersistenceException {
-        if(products.size() == 0) {
-            loadSwgFlooringProduct();
-            return products;
-        } else {
-            return products;
-        }
-        
+        loadSwgFlooringProduct();
+        return products;
     }
 
     @Override

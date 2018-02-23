@@ -47,7 +47,7 @@ public class SwgFlooringController {
                         displayOrdersByDate();
                         break;
                     case 2:
-                        //displayCurrentProductsAndStates();
+                        displayCurrentProductsAndStates();
                         addNewOrder();
                         break;
                     case 3:
@@ -88,10 +88,10 @@ public class SwgFlooringController {
     }
 
     private void displayCurrentProductsAndStates() throws SwgFlooringPersistenceException {
-//        List<Product> productList = service.getProductsList();
-//        view.displayListOfProducts(productList);
-//        List<Tax> stateList = service.getTaxesList();
-//        view.displayListOfStates(stateList);
+        List<Product> productList = service.getProductsList();
+        view.displayListOfProducts(productList);
+        List<Tax> stateList = service.getTaxesList();
+        view.displayListOfStates(stateList);
     }
 
     private void displayOrdersByDate() throws SwgFlooringPersistenceException {
