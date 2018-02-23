@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -37,6 +35,7 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
     private List<Product> products = new ArrayList<>();
     private List<Tax> taxes = new ArrayList<>();
     private List<LocalDate> orderDateList = new ArrayList<>();
+    private boolean isTrainingMode;
 
     private void loadSwgFlooring(LocalDate orderDate) throws SwgFlooringPersistenceException {
 
@@ -94,6 +93,7 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
     }
 
     private void loadSwgFlooringProduct() throws SwgFlooringPersistenceException {
+        
         Scanner scanner;
 
         try {
@@ -151,44 +151,70 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
         scanner.close();
 
     }
+    
+    private void loadTrainingOrProduction() throws SwgFlooringPersistenceException {
+        Scanner scanner;
+
+        try {
+            scanner = new Scanner(new FileReader("config.txt"));
+        } catch (FileNotFoundException ex) {
+            throw new SwgFlooringPersistenceException(
+                    "File could not load.", ex);
+        }
+        
+        String value = scanner.next();
+        if(value.equals("true")) {
+            isTrainingMode = true;
+        }
+    }
 
     private void writeSwgFlooring(LocalDate writeOrderDate) throws SwgFlooringPersistenceException {
+        loadTrainingOrProduction();
+        if (isTrainingMode == false) {
+            List<Order> newList = listOrdersByDate(writeOrderDate);
 
-        List<Order> newList = listOrdersByDate(writeOrderDate);
+            String writeOrderDateFile = "Orders_" + (writeOrderDate.format(DateTimeFormatter.ofPattern("MMddyyyy"))) + ".txt";
 
-        String writeOrderDateFile = "Orders_" + (writeOrderDate.format(DateTimeFormatter.ofPattern("MMddyyyy"))) + ".txt";
+            PrintWriter out = null;
+            try {
+                out = new PrintWriter(new FileWriter(writeOrderDateFile));
 
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(new FileWriter(writeOrderDateFile));
+            } catch (IOException ex) {
+                System.out.println("Can't find file: " + ex.getMessage());
+            }
 
-        } catch (IOException ex) {
-            System.out.println("Can't find file: " + ex.getMessage());
+            for (Order currentOrder : newList) {
+                out.println(currentOrder.getOrderNumber() + DELIMITER
+                        + currentOrder.getCustomerName() + DELIMITER
+                        + currentOrder.getTax().getState() + DELIMITER
+                        + currentOrder.getTax().getTaxRate() + DELIMITER
+                        + currentOrder.getProduct().getProductType() + DELIMITER
+                        + currentOrder.getAreaOfMaterial() + DELIMITER
+                        + currentOrder.getProduct().getCostPerSquareFoot() + DELIMITER
+                        + currentOrder.getProduct().getLaborCostPerSquareFoot() + DELIMITER
+                        + currentOrder.getMaterialCost() + DELIMITER
+                        + currentOrder.getTotalLaborCost() + DELIMITER
+                        + currentOrder.getTotalTax() + DELIMITER
+                        + currentOrder.getTotalCost());
+
+                out.flush();
+            }
+            out.close();
+        } else if (isTrainingMode == true) {
+            return;
         }
 
-        for (Order currentOrder : newList) {
-            out.println(currentOrder.getOrderNumber() + DELIMITER
-                    + currentOrder.getCustomerName() + DELIMITER
-                    + currentOrder.getTax().getState() + DELIMITER
-                    + currentOrder.getTax().getTaxRate() + DELIMITER
-                    + currentOrder.getProduct().getProductType() + DELIMITER
-                    + currentOrder.getAreaOfMaterial() + DELIMITER
-                    + currentOrder.getProduct().getCostPerSquareFoot() + DELIMITER
-                    + currentOrder.getProduct().getLaborCostPerSquareFoot() + DELIMITER
-                    + currentOrder.getMaterialCost() + DELIMITER
-                    + currentOrder.getTotalLaborCost() + DELIMITER
-                    + currentOrder.getTotalTax() + DELIMITER
-                    + currentOrder.getTotalCost());
-
-            out.flush();
-        }
-        out.close();
     }
 
     @Override
     public List<Product> getProductsList() throws SwgFlooringPersistenceException {
-        loadSwgFlooringProduct();
-        return products;
+        if(products.size() == 0) {
+            loadSwgFlooringProduct();
+            return products;
+        } else {
+            return products;
+        }
+        
     }
 
     @Override
@@ -269,7 +295,7 @@ public class SwgFlooringDaoFileImpl implements SwgFlooringDao {
 
             if (!order.getOrderDate().equals(orderDate)) {
                 return null;
-                
+
             } else {
                 orderList.add(order);
             }

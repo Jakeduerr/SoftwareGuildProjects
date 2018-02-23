@@ -88,6 +88,15 @@ public class SwgFlooringView {
     public void displayErrorMessage(String errorMsg) {
         io.print("!!! ERROR !!!");
         io.print(errorMsg);
+        io.print(" ");
+    }
+
+    public void displayOrderNotRemoved() {
+        io.print("Order was NOT removed.");
+    }
+
+    public void displayOrderDiscarded() {
+        io.print("Order has been discarded.");
     }
 
     public String getConfirmation() {
@@ -130,6 +139,22 @@ public class SwgFlooringView {
             io.print(tax.getState());
         });
         io.print(" ");
+    }
+    
+    public void displayCurrentName(Order order) {
+        io.print("Current Customer Name: " + order.getCustomerName());
+    }
+    
+    public void displayCurrentState(Order order) {
+        io.print("Current Customer State: " + order.getTax().getState());
+    }
+    
+    public void displayCurrentProduct(Order order) {
+        io.print("Current Product Type: " + order.getProduct().getProductType());
+    }
+    
+    public void displayCurrentArea(Order order) {
+        io.print("Current Area of Material: " + order.getAreaOfMaterial());
     }
 
     public void displayOrderData(Order order) {
@@ -199,23 +224,38 @@ public class SwgFlooringView {
         return currentOrder;
     }
 
+    public String addState() {
+        String userState = io.readString("Please enter Customer's State:");
+        return userState;
+    }
+
+    public String addProductType() {
+        String userProductType = io.readString("Please enter the type of material: ");
+        return userProductType;
+    }
+
+    public String addAreaOfMaterial() {
+        String userArea = io.readString("Please enter the required area of material:");
+        return userArea;
+    }
+
     public String editCustomerName() {
-        String userCustomerName = io.readString("Please enter new Customer name:");
+        String userCustomerName = io.readString("Please enter new Customer name or press enter to keep the same.");
         return userCustomerName;
     }
 
     public String editState() {
-        String userState = io.readString("Please enter new Customer State: ");
+        String userState = io.readString("Please enter new Customer State or press enter to keep the same.");
         return userState;
     }
 
     public String editProductType() {
-        String userProductType = io.readString("Please enter the new type of material: ");
+        String userProductType = io.readString("Please enter the new type of material or press enter to keep the same. ");
         return userProductType;
     }
 
     public String editAreaOfMaterial() {
-        String userArea = io.readString("Please enter the new required area of material: ");
+        String userArea = io.readString("Please enter the new required area of material or press enter to keep the same.");
         return userArea;
     }
 

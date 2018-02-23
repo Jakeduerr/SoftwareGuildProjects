@@ -5,7 +5,6 @@
  */
 package com.sg.swgflooring.controller;
 
-import com.sg.swgflooring.dao.SwgFlooringDao;
 import com.sg.swgflooring.dao.SwgFlooringPersistenceException;
 import com.sg.swgflooring.dto.Order;
 import com.sg.swgflooring.dto.Product;
@@ -38,9 +37,9 @@ public class SwgFlooringController {
     public void run() {
         boolean askAgain = true;
         int menuSelection;
-        try {
 
-            while (askAgain) {
+        while (askAgain) {
+            try {
                 menuSelection = getMenuSelection();
 
                 switch (menuSelection) {
@@ -48,6 +47,7 @@ public class SwgFlooringController {
                         displayOrdersByDate();
                         break;
                     case 2:
+                        //displayCurrentProductsAndStates();
                         addNewOrder();
                         break;
                     case 3:
@@ -67,11 +67,12 @@ public class SwgFlooringController {
                         unknownCommand();
 
                 }
+            } catch (SwgFlooringPersistenceException ex) {
+                view.displayErrorMessage(ex.getMessage());
             }
-            exitMessage();
-        } catch (SwgFlooringPersistenceException ex) {
-            view.displayErrorMessage(ex.getMessage());
         }
+        exitMessage();
+
     }
 
     private void unknownCommand() {
@@ -84,6 +85,13 @@ public class SwgFlooringController {
 
     private int getMenuSelection() {
         return view.displayMenuAndGetSelection();
+    }
+
+    private void displayCurrentProductsAndStates() throws SwgFlooringPersistenceException {
+//        List<Product> productList = service.getProductsList();
+//        view.displayListOfProducts(productList);
+//        List<Tax> stateList = service.getTaxesList();
+//        view.displayListOfStates(stateList);
     }
 
     private void displayOrdersByDate() throws SwgFlooringPersistenceException {
@@ -114,7 +122,7 @@ public class SwgFlooringController {
                 service.removeOrder(removeOrderDate, removeOrderNumber);
                 view.displayRemoveSuccessBanner();
             } else if (userChoice.equalsIgnoreCase("N")) {
-                io.print("Order was NOT removed.");
+                view.displayOrderNotRemoved();
             } else {
                 unknownCommand();
             }
@@ -124,67 +132,90 @@ public class SwgFlooringController {
     private void addNewOrder() throws SwgFlooringPersistenceException {
 
         view.displayAddOrderBanner();
-//        List<Product> productList = service.getProductsList();
-//        view.displayListOfProducts(productList);
-//        List<Tax> stateList = service.getTaxesList();
-//        view.displayListOfStates(stateList);
         Order newOrder = view.addNewOrder();
+
         String state = newOrder.getTax().getState();
-        boolean result1 = service.checkStateInput(state);
-        String productType = newOrder.getProduct().getProductType();
-        boolean result2 = service.checkProductInput(productType);
-        BigDecimal areaOfMaterial = newOrder.getAreaOfMaterial();
-        boolean result3 = service.checkAreaOfMaterial(areaOfMaterial);
+        boolean askAgain = true;
+        while (askAgain) {
 
-        if (result1 == false || result2 == false || result3 == false) {
-            view.displayErrorMessage("State, Product, or Area are invalid.");
-        } else {
-            
-            int newOrderNumber = service.setOrderNumber(newOrder.getOrderDate());
-            newOrder.setOrderNumber(newOrderNumber);
-
-            newOrder.getOrderDate().format(DateTimeFormatter.ofPattern("MMddyyyy"));
-
-            Product product = service.getProduct(productType);
-            newOrder.setProduct(product);
-
-            BigDecimal materialCost = service.calculateMaterialCost(product, newOrder.getAreaOfMaterial());
-            newOrder.setMaterialCost(materialCost);
-            BigDecimal laborCost = service.calculateLaborCost(product, newOrder.getAreaOfMaterial());
-            newOrder.setTotalLaborCost(laborCost);
-
-            Tax tax = service.getTax(state);
-            newOrder.setTax(tax);
-
-            BigDecimal totalTax = service.calculateTotalTax(materialCost, laborCost, tax);
-            BigDecimal totalTax2 = totalTax.setScale(2, RoundingMode.HALF_UP);
-            newOrder.setTotalTax(totalTax2);
-            BigDecimal totalCost = service.calculateTotalCost(materialCost, laborCost, totalTax);
-            BigDecimal totalCost2 = totalCost.setScale(2, RoundingMode.HALF_UP);
-            newOrder.setTotalCost(totalCost2);
-
-            view.displaySummary(newOrder);
-
-            String userChoice = view.getConfirmation();
-            if (userChoice.equalsIgnoreCase("Y")) {
-                service.addNewOrder(newOrder);
-                view.displayAddOrderSuccessBanner();
-            } else if (userChoice.equalsIgnoreCase("N")) {
-                io.print("Order has been discarded.");
+            boolean result = service.checkStateInput(state);
+            if (result == false) {
+                view.displayErrorMessage("State is invalid.");
+                state = view.addState();
             } else {
-                unknownCommand();
+                Tax tax = service.getTax(state);
+                newOrder.setTax(tax);
+                askAgain = false;
             }
+        }
+
+        String productType = newOrder.getProduct().getProductType();
+        boolean askAgain2 = true;
+        while (askAgain2) {
+
+            boolean result2 = service.checkProductInput(productType);
+            if (result2 == false) {
+                view.displayErrorMessage("Product is invalid.");
+                productType = view.addProductType();
+            } else {
+                Product product = service.getProduct(productType);
+                newOrder.setProduct(product);
+                askAgain2 = false;
+            }
+        }
+
+        BigDecimal areaOfMaterial = newOrder.getAreaOfMaterial();
+        boolean askAgain3 = true;
+        while (askAgain3) {
+            boolean result3 = service.checkAreaOfMaterial(areaOfMaterial);
+            if (result3 == false) {
+                view.displayErrorMessage("Area is invalid.");
+                String newAreaString = view.addAreaOfMaterial();
+                areaOfMaterial = new BigDecimal(newAreaString);
+            } else {
+                newOrder.setAreaOfMaterial(areaOfMaterial);
+                askAgain3 = false;
+            }
+        }
+
+        int newOrderNumber = service.setOrderNumber(newOrder.getOrderDate());
+        newOrder.setOrderNumber(newOrderNumber);
+
+        newOrder.getOrderDate().format(DateTimeFormatter.ofPattern("MMddyyyy"));
+
+        BigDecimal materialCost = service.calculateMaterialCost(newOrder.getProduct(), newOrder.getAreaOfMaterial());
+        newOrder.setMaterialCost(materialCost);
+        BigDecimal laborCost = service.calculateLaborCost(newOrder.getProduct(), newOrder.getAreaOfMaterial());
+        newOrder.setTotalLaborCost(laborCost);
+
+        BigDecimal totalTax = service.calculateTotalTax(materialCost, laborCost, newOrder.getTax());
+        BigDecimal totalTax2 = totalTax.setScale(2, RoundingMode.HALF_UP);
+        newOrder.setTotalTax(totalTax2);
+        BigDecimal totalCost = service.calculateTotalCost(materialCost, laborCost, totalTax);
+        BigDecimal totalCost2 = totalCost.setScale(2, RoundingMode.HALF_UP);
+        newOrder.setTotalCost(totalCost2);
+
+        view.displaySummary(newOrder);
+
+        String userChoice = view.getConfirmation();
+        if (userChoice.equalsIgnoreCase("Y")) {
+            service.addNewOrder(newOrder);
+            view.displayAddOrderSuccessBanner();
+        } else if (userChoice.equalsIgnoreCase("N")) {
+            view.displayOrderDiscarded();
+        } else {
+            unknownCommand();
         }
 
     }
 
     private void editAnOrder() throws SwgFlooringPersistenceException {
-        view.displayEditBanner();
         LocalDate editOrderDate = view.editOrderDate();
         int editOrderNumber = view.editOrderNumber();
         Order newEditOrder = service.getOrder(editOrderDate, editOrderNumber);
-
-        io.print("Current Customer Name: " + newEditOrder.getCustomerName());
+        view.displayEditBanner();
+        
+        view.displayCurrentName(newEditOrder);
         String editChoiceCustomerName = view.editCustomerName();
         if (editChoiceCustomerName.equalsIgnoreCase("")) {
             //do nothing
@@ -192,46 +223,70 @@ public class SwgFlooringController {
             newEditOrder.setCustomerName(editChoiceCustomerName);
         }
 
-        io.print("Current Customer State: " + newEditOrder.getTax().getState());
-        String editChoiceState = view.editState();
-        if (editChoiceState.equalsIgnoreCase("")) {
-            //do nothing
-        } else if (!editChoiceState.equals(newEditOrder.getTax().getState())) {
-            newEditOrder.getTax().setState(editChoiceState);
+        view.displayCurrentState(newEditOrder);
+        boolean askAgain1 = true;
+        while (askAgain1) {
+            String editChoiceState = view.editState();
+            if (editChoiceState.equalsIgnoreCase("")) {
+                //do nothing
+                askAgain1 = false;
+            } else if (!editChoiceState.equals(newEditOrder.getTax().getState())) {
+                boolean result1 = service.checkStateInput(editChoiceState);
+                if (result1 == false) {
+                    view.displayErrorMessage("State is invalid.");
+                } else {
+                    Tax tax = service.getTax(editChoiceState);
+                    newEditOrder.setTax(tax);
+                    askAgain1 = false;
+                }
+            }
         }
 
-        io.print("Current Product Type: " + newEditOrder.getProduct().getProductType());
-        String editChoiceProductType = view.editProductType();
-        if (editChoiceProductType.equalsIgnoreCase("")) {
-            //do nothing
-        } else if (!editChoiceProductType.equals(newEditOrder.getProduct().getProductType())) {
-            newEditOrder.getProduct().setProductType(editChoiceProductType);
+        view.displayCurrentProduct(newEditOrder);
+        boolean askAgain2 = true;
+        while (askAgain2) {
+            String editChoiceProductType = view.editProductType();
+            if (editChoiceProductType.equalsIgnoreCase("")) {
+                //do nothing
+                askAgain2 = false;
+            } else if (!editChoiceProductType.equals(newEditOrder.getProduct().getProductType())) {
+                boolean result2 = service.checkProductInput(editChoiceProductType);
+                if (result2 == false) {
+                    view.displayErrorMessage("Product Type is invalid.");
+                } else {
+                    Product product = service.getProduct(editChoiceProductType);
+                    newEditOrder.setProduct(product);
+                    askAgain2 = false;
+                }
+            }
         }
 
-        io.print("Current Area of Material: " + newEditOrder.getAreaOfMaterial());
-
-        String editChoiceArea = view.editAreaOfMaterial();
-        String newAreaString = String.valueOf(newEditOrder.getAreaOfMaterial().doubleValue());
-        if (editChoiceArea.equalsIgnoreCase("")) {
-            //do nothing
-        } else if (!editChoiceArea.equals(newAreaString)) {
-            BigDecimal newArea = new BigDecimal(editChoiceArea);
-            newEditOrder.setAreaOfMaterial(newArea);
+        view.displayCurrentArea(newEditOrder);
+        boolean askAgain3 = true;
+        while (askAgain3) {
+            String editChoiceArea = view.editAreaOfMaterial();
+            String newAreaString = String.valueOf(newEditOrder.getAreaOfMaterial().doubleValue());
+            if (editChoiceArea.equalsIgnoreCase("")) {
+                //do nothing
+                askAgain3 = false;
+            } else if (!editChoiceArea.equals(newAreaString)) {
+                BigDecimal newArea = new BigDecimal(editChoiceArea);
+                boolean result3 = service.checkAreaOfMaterial(newArea);
+                if (result3 == false) {
+                    view.displayErrorMessage("Area of Material is invalid.");
+                } else {
+                    newEditOrder.setAreaOfMaterial(newArea);
+                    askAgain3 = false;
+                }
+            }
         }
 
-        String productType = newEditOrder.getProduct().getProductType();
-        Product product = service.getProduct(productType);
-        newEditOrder.setProduct(product);
-        BigDecimal materialCost = service.calculateMaterialCost(product, newEditOrder.getAreaOfMaterial());
+        BigDecimal materialCost = service.calculateMaterialCost(newEditOrder.getProduct(), newEditOrder.getAreaOfMaterial());
         newEditOrder.setMaterialCost(materialCost);
-        BigDecimal laborCost = service.calculateLaborCost(product, newEditOrder.getAreaOfMaterial());
+        BigDecimal laborCost = service.calculateLaborCost(newEditOrder.getProduct(), newEditOrder.getAreaOfMaterial());
         newEditOrder.setTotalLaborCost(laborCost);
 
-        String state = newEditOrder.getTax().getState();
-        Tax tax = service.getTax(state);
-        newEditOrder.setTax(tax);
-
-        BigDecimal totalTax = service.calculateTotalTax(materialCost, laborCost, tax);
+        BigDecimal totalTax = service.calculateTotalTax(materialCost, laborCost, newEditOrder.getTax());
         BigDecimal totalTax2 = totalTax.setScale(2, RoundingMode.HALF_UP);
         newEditOrder.setTotalTax(totalTax2);
         BigDecimal totalCost = service.calculateTotalCost(materialCost, laborCost, totalTax);

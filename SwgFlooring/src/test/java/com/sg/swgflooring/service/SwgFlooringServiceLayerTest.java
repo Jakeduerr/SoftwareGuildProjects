@@ -8,14 +8,13 @@ package com.sg.swgflooring.service;
 import com.sg.swgflooring.dao.SwgFlooringAuditDao;
 import com.sg.swgflooring.dao.SwgFlooringAuditDaoStubImpl;
 import com.sg.swgflooring.dao.SwgFlooringDao;
-import com.sg.swgflooring.dao.SwgFlooringDaoStubImpl;
+import com.sg.swgflooring.dao.SwgFlooringDaoFileImpl;
 import com.sg.swgflooring.dao.SwgFlooringPersistenceException;
 import com.sg.swgflooring.dto.Order;
 import com.sg.swgflooring.dto.Product;
 import com.sg.swgflooring.dto.Tax;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,10 +29,11 @@ import static org.junit.Assert.*;
 public class SwgFlooringServiceLayerTest {
 
     private SwgFlooringServiceLayer service;
+    private LocalDate testDate = LocalDate.of(1990, 02, 23);
 
     public SwgFlooringServiceLayerTest() {
 
-        SwgFlooringDao dao = new SwgFlooringDaoStubImpl();
+        SwgFlooringDao dao = new SwgFlooringDaoFileImpl();
         SwgFlooringAuditDao auditDao = new SwgFlooringAuditDaoStubImpl();
 
         service = new SwgFlooringServiceLayerImpl(dao, auditDao);
@@ -144,6 +144,12 @@ public class SwgFlooringServiceLayerTest {
      */
     @Test
     public void testCheckProductInput() throws Exception {
+        boolean test = service.checkProductInput("Wood");
+        assertTrue(test);
+        
+        boolean test2 = service.checkProductInput("food");
+        assertFalse(test2);
+        
     }
 
     /**
@@ -151,6 +157,12 @@ public class SwgFlooringServiceLayerTest {
      */
     @Test
     public void testCheckStateInput() throws Exception {
+        boolean test = service.checkStateInput("OH");
+        assertTrue(test);
+        
+        boolean test2 = service.checkStateInput("food");
+        assertFalse(test2);
+        
     }
 
     /**
@@ -158,6 +170,14 @@ public class SwgFlooringServiceLayerTest {
      */
     @Test
     public void testCheckAreaOfMaterial() throws Exception {
+        BigDecimal testArea = new BigDecimal("1");
+        boolean test = service.checkAreaOfMaterial(testArea);
+        assertTrue(test);
+        
+        BigDecimal testArea2 = new BigDecimal("-1");
+        boolean test2 = service.checkAreaOfMaterial(testArea2);
+        assertFalse(test2);
+        
     }
 
     /**
@@ -165,6 +185,16 @@ public class SwgFlooringServiceLayerTest {
      */
     @Test
     public void testCheckOrdersByDate() throws Exception {
+        boolean test = service.checkOrdersByDate(testDate);
+        assertTrue(test);
+        
+        try {
+            service.checkOrdersByDate(LocalDate.of(1990, 01, 23));
+            fail("Expected SwgFlooringPersistenceException was not thrown.");
+        } catch (SwgFlooringPersistenceException ex) {
+            
+        }
+        
     }
 
     /**
@@ -172,6 +202,16 @@ public class SwgFlooringServiceLayerTest {
      */
     @Test
     public void testCheckOrders() throws Exception {
+        boolean test = service.checkOrders(testDate, 1);
+        assertTrue(test);
+        
+        try {
+            service.checkOrders(LocalDate.of(1990, 01, 23), 1);
+            fail("Expected SwgFlooringPersistenceException was not thrown.");
+        } catch (SwgFlooringPersistenceException ex) {
+            
+        }
+        
     }
 
     /**
