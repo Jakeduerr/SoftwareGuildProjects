@@ -11,64 +11,62 @@
         <h1>Vending Machine</h1>
         <hr/>
         <ul class="list-group" id="errorMessages"></ul>
-        <div class="row">
-            <div class="col-md-8" id="item-div">
+        <div class="col-md-8" id="item-div">
 
-                <!-- div that holds all the items in the vending machine -->
+            <!-- div that holds all the items in the vending machine -->
 
-            </div>
-            <div class="col-md-4" id="input-divs">
-                <form class="form-horizontal" role="form" id="money-form">
-                    <div class="form-group">
-                        <label for="total-money-in" class="col-md-11 control-label">Total $ In!</label>
-                        <div class="col-md-offset-3 col-md-5">
-                            <input type="text" class="form-control" id="total-money-in" placeholder="0" />
-                        </div>
+        </div>
+        <div class="col-md-4" id="input-divs">
+            <form class="form-horizontal" role="form" id="money-form">
+                <div class="form-group">
+                    <label for="total-money-in" class="col-md-11 control-label">Total $ In!</label>
+                    <div class="col-md-offset-3 col-md-5">
+                        <input type="text" class="form-control" id="total-money-in" placeholder="0" />
                     </div>
-                    <div class="col-md-6">
-                        <button type="button" id="add-dollar" class="btn btn-default">ADD DOLLAR!</button>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="button" id="add-quarter" class="btn btn-default">ADD QUARTER!</button>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="button" id="add-dime" class="btn btn-default">ADD DIME!</button>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="button" id="add-nickel" class="btn btn-default">ADD NICKEL!</button>
-                    </div>
-                </form>
-                <hr/>
-                <form class="form-horizontal" role="form" id="messages-form">
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="add-dollar" class="btn btn-default">ADD DOLLAR!</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="add-quarter" class="btn btn-default">ADD QUARTER!</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="add-dime" class="btn btn-default">ADD DIME!</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" id="add-nickel" class="btn btn-default">ADD NICKEL!</button>
+                </div>
+            </form>
+            <hr/>
+            <form class="form-horizontal" role="form" id="messages-form">
+                <div class="col-md-11">
                     <label for="messages" class="col-md-11 control-label">Messages!</label>
+                    <input type="text" class="form-control" id="messages" placeholder="Messages" />
+                </div>
 
-                    <div class="col-md-offset-1 col-md-9">
-                        <input type="text" class="form-control" id="messages" placeholder="Messages" />
-                    </div>
+                <label for="items" class="col-md-11 control-label">Item:</label>
 
-                    <label for="items" class="col-md-11 control-label">Item:</label>
+                <div class="col-md-offset-3 col-md-5">
+                    <input type="text" class="form-control" id="items" placeholder="Item"/>
+                </div>
 
-                    <div class="col-md-offset-3 col-md-5">
-                        <input type="text" class="form-control" id="items" placeholder="Item" />
-                    </div>
+                <div class="col-md-offset-3 col-md-6">
+                    <button type="button" id="makePurchase" class="btn btn-default">MAKE PURCHASE!</button>
+                </div>
+            </form>
+            <hr/>
+            <form class="form-horizontal" role="form" id="change-form">
+                <label for="change" class="col-md-11 control-label">Change!</label>
 
-                    <div class="col-md-offset-3 col-md-6">
-                        <button type="button" id="makePurchase" class="btn btn-default">MAKE PURCHASE!</button>
-                    </div>
-                </form>
-                <hr/>
-                <form class="form-horizontal" role="form" id="change-form">
-                    <label for="change" class="col-md-11 control-label">Change!</label>
+                <div class="col-md-11">
+                    <input type="text" class="form-control" id="change" placeholder="Change" />
+                </div>
 
-                    <div class="col-md-offset-3 col-md-5">
-                        <input type="text" class="form-control" id="change" placeholder="Change" />
-                    </div>
+                <div class="col-md-offset-3 col-md-6">
+                    <button type="button" id="returnChange" class="btn btn-default">RETURN CHANGE!</button>
+                </div>
+            </form>
 
-                    <div class="col-md-offset-3 col-md-6">
-                        <button type="button" id="returnChange" class="btn btn-default">RETURN CHANGE!</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
     <script src="js/jquery-2.2.4.min.js"></script>
