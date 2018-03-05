@@ -1,0 +1,9 @@
+Diet Coke::1.50::5
+Amp Energy::2.00::5
+Coke::1.50::5
+Gatorade::1.75::5
+Apple Juice::1.75::5
+Orange Juice::1.75::5
+Cherry Coke::1.50::5
+Vitaminwater::1.75::5
+Mello Yello::1.50::5
