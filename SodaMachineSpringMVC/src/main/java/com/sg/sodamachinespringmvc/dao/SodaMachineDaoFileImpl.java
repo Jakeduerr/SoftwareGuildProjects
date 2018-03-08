@@ -32,8 +32,7 @@ public class SodaMachineDaoFileImpl implements SodaMachineDao {
 
     private void loadSodaMachine() throws SodaMachinePersistenceException {
         Scanner scanner;
-        
-        //is this the correct way to set up my file reading
+
         try {
             scanner = new Scanner(new FileReader(getClass().getClassLoader().getResource("sodas.txt").getFile()));
         } catch (FileNotFoundException e) {

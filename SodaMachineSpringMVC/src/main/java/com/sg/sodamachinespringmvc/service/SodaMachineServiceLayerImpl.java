@@ -21,10 +21,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SodaMachineServiceLayerImpl implements SodaMachineServiceLayer {
-    
-    @Inject
-    SodaController controller;
-    
+
     @Inject
     SodaMachineDao dao;
 
@@ -35,15 +32,15 @@ public class SodaMachineServiceLayerImpl implements SodaMachineServiceLayer {
         BigDecimal dime = new BigDecimal("10");
         BigDecimal nickel = new BigDecimal("5");
         BigDecimal penny = new BigDecimal("1");
-        
+
         BigDecimal howManyQuarters = new BigDecimal("0.0");
         BigDecimal howManyDimes = new BigDecimal("0.0");
         BigDecimal howManyNickels = new BigDecimal("0.0");
         BigDecimal howManyPennies = new BigDecimal("0.0");
-        
+
         BigDecimal changeGiven1 = userInput.subtract(itemPrice);
         BigDecimal newUserInput = changeGiven1.multiply(new BigDecimal("100"));
-        
+
         howManyQuarters = newUserInput.divide(quarter, 0, RoundingMode.DOWN);
         BigDecimal changeGiven2 = newUserInput.subtract(howManyQuarters.multiply(quarter));
         howManyDimes = changeGiven2.divide(dime, 0, RoundingMode.DOWN);
@@ -58,25 +55,14 @@ public class SodaMachineServiceLayerImpl implements SodaMachineServiceLayer {
 
     }
 
-    //confused on how to use these methods in my service and dao to create functionality
-    
     @Override
     public void checkUserInput(BigDecimal itemPrice, BigDecimal userInput)
             throws SodaMachinePersistenceException,
             SodaMachineInsufficientFundsException {
 
         if (itemPrice.compareTo(userInput) > 0) {
-            throw new SodaMachineInsufficientFundsException("Not enough money, please enter more. You entered " + userInput + "¢.");
-            
-        }
-        
-    }
+            throw new SodaMachineInsufficientFundsException("Please deposit: $");
 
-    @Override
-    public void checkSodaSelection(Soda soda) throws SodaMachinePersistenceException, SodaMachineUnknownSodaException {
-
-        if (soda == null) {
-            throw new SodaMachineUnknownSodaException("Sorry, we do not carry that soda.");
         }
 
     }
@@ -86,10 +72,10 @@ public class SodaMachineServiceLayerImpl implements SodaMachineServiceLayer {
 
         int checkInt = dao.getSoda(sodaName).getNumOfSoda();
         if (checkInt <= 0) {
-            throw new SodaMachineNoItemInventoryException("Sorry, we are out of that soda.");
+            throw new SodaMachineNoItemInventoryException("SOLD OUT!!!");
 
         }
-        
+
     }
 
     @Override

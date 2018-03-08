@@ -21,8 +21,6 @@ public interface SodaMachineServiceLayer {
     void checkUserInput(BigDecimal itemPrice, BigDecimal userInput) throws SodaMachinePersistenceException, 
             SodaMachineInsufficientFundsException;
     
-    void checkSodaSelection(Soda soda) throws SodaMachinePersistenceException, SodaMachineUnknownSodaException;
-    
     void checkInventory(String sodaName) throws SodaMachinePersistenceException, 
             SodaMachineNoItemInventoryException;
     
