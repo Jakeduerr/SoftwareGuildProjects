@@ -1,8 +1,8 @@
 use HotelReservation;
 
-select * from reservation;
+-- select * from reservation;
 
--- select * from customer;
+select * from customer;
 
 
 
