@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author jakeduerr
  */
 public class Organization {
-    
+
     private int organizationId;
     private String name;
     private String description;
@@ -99,7 +99,5 @@ public class Organization {
         }
         return true;
     }
-    
-    
-    
+
 }

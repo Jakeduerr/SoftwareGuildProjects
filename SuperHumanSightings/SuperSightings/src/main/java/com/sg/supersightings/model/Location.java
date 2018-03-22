@@ -13,7 +13,7 @@ import java.util.Objects;
  * @author jakeduerr
  */
 public class Location {
-    
+
     private int locationId;
     private String name;
     private String description;
@@ -114,8 +114,4 @@ public class Location {
         return true;
     }
 
-    
-    
-    
-    
 }

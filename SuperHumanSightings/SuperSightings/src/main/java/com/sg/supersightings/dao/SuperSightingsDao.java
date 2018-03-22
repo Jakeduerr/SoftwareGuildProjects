@@ -16,55 +16,55 @@ import java.util.List;
  * @author jakeduerr
  */
 public interface SuperSightingsDao {
-    
+
     //Location methods
     void addLocation(Location location);
-    
+
     void deleteLocation(int locationId);
-    
+
     void updateLocation(Location location);
-    
+
     Location getLocationById(int locationId);
-    
+
     List<Location> getAllLocations();
-    
+
     //Sighting methods
     void addSighting(Sighting sighting);
-    
+
     void deleteSighting(int sightingId);
-    
+
     void updateSighting(Sighting sighting);
-    
+
     Sighting getSightingById(int sightingId);
-    
+
     List<Sighting> getSightingsByLocationId(int locationId);
-    
+
     List<Sighting> getSightingsBySuperHumanId(int superHumanId);
-    
+
     List<Sighting> getAllSightings();
-    
+
     //SuperHuman methods
     void addSuperHuman(SuperHuman superHuman);
-    
+
     void deleteSuperHuman(int superHumanId);
-    
+
     void updateSuperHuman(SuperHuman superHuman);
-    
+
     SuperHuman getSuperHumanById(int superHumanId);
-    
+
     List<SuperHuman> getSuperHumansByOrganizationId(int organizationId);
-    
+
     List<SuperHuman> getAllSuperHumans();
-    
+
     //Organization methods
     void addOrganization(Organization organization);
-    
+
     void deleteOrganization(int organizationId);
-    
+
     void updateOrganization(Organization organization);
-    
+
     Organization getOrganizationById(int organizationId);
-    
+
     List<Organization> getAllOrganizations();
-    
+
 }

@@ -6,6 +6,7 @@
 package com.sg.supersightings.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,11 +15,11 @@ import java.util.Objects;
  * @author jakeduerr
  */
 public class Sighting {
-    
+
     private int sightingId;
     private Date date;
     private Location location;
-    private List<SuperHuman> superHumans;
+    private List<SuperHuman> superHumans = new ArrayList<>();
 
     public int getSightingId() {
         return sightingId;
@@ -54,11 +55,11 @@ public class Sighting {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + this.sightingId;
-        hash = 79 * hash + Objects.hashCode(this.date);
-        hash = 79 * hash + Objects.hashCode(this.location);
-        hash = 79 * hash + Objects.hashCode(this.superHumans);
+        int hash = 3;
+        hash = 89 * hash + this.sightingId;
+        hash = 89 * hash + Objects.hashCode(this.date);
+        hash = 89 * hash + Objects.hashCode(this.location);
+        hash = 89 * hash + Objects.hashCode(this.superHumans);
         return hash;
     }
 
@@ -89,8 +90,4 @@ public class Sighting {
         return true;
     }
 
-    
-    
-    
-    
 }

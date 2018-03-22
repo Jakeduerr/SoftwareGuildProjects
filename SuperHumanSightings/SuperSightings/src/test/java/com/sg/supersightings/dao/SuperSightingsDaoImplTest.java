@@ -10,6 +10,8 @@ import com.sg.supersightings.model.Organization;
 import com.sg.supersightings.model.Sighting;
 import com.sg.supersightings.model.SuperHuman;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
@@ -27,26 +29,26 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author jakeduerr
  */
 public class SuperSightingsDaoImplTest {
-    
+
     SuperSightingsDao dao;
-    
+
     public SuperSightingsDaoImplTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("test-applicationContext.xml");
-        
+
         dao = ctx.getBean("superSightingsDao", SuperSightingsDao.class);
-        
+
         List<Location> locals = dao.getAllLocations();
         for (Location currentLocation : locals) {
             dao.deleteLocation(currentLocation.getLocationId());
@@ -64,7 +66,7 @@ public class SuperSightingsDaoImplTest {
             dao.deleteOrganization(currentOrganization.getOrganizationId());
         }
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -80,19 +82,19 @@ public class SuperSightingsDaoImplTest {
      * Test of addLocation method, of class SuperSightingsDaoImpl.
      */
     @Test
-    public void testAddLocation() {
+    public void testAddGetLocation() {
         Location location = new Location();
         location.setName("Empire State Building");
         location.setDescription("Fight on a skyscraper");
         location.setAddress("350 5th Ave, New York, NY 10118");
         location.setLatitude(new BigDecimal("40.7484"));
         location.setLongitude(new BigDecimal("73.9857"));
-        
+
         dao.addLocation(location);
-        
+
         Location fromDao = dao.getLocationById(location.getLocationId());
         assertEquals(fromDao, location);
-        
+
     }
 
     /**
@@ -106,9 +108,9 @@ public class SuperSightingsDaoImplTest {
         location.setAddress("350 5th Ave, New York, NY 10118");
         location.setLatitude(new BigDecimal("40.7484"));
         location.setLongitude(new BigDecimal("73.9857"));
-        
+
         dao.addLocation(location);
-        
+
         Location fromDao = dao.getLocationById(location.getLocationId());
         assertEquals(fromDao, location);
         dao.deleteLocation(location.getLocationId());
@@ -120,13 +122,24 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testUpdateLocation() {
-    }
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
 
-    /**
-     * Test of getLocationById method, of class SuperSightingsDaoImpl.
-     */
-    @Test
-    public void testGetLocationById() {
+        dao.addLocation(location);
+
+        Location fromDao = dao.getLocationById(location.getLocationId());
+        assertEquals(fromDao, location);
+
+        location.setName("Statue Of Liberty");
+        dao.updateLocation(location);
+
+        fromDao = dao.getLocationById(location.getLocationId());
+        assertEquals(fromDao, location);
+
     }
 
     /**
@@ -134,14 +147,64 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testGetAllLocations() {
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
+
+        List<Location> locals = new ArrayList<>();
+        dao.addLocation(location);
+        locals.add(location);
+        assertEquals(1, locals.size());
+
     }
 
     /**
      * Test of addSighting method, of class SuperSightingsDaoImpl.
      */
     @Test
-    public void testAddSighting() {
-        
+    public void testAddGetSighting() {
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
+
+        dao.addLocation(location);
+
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
+
+        dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        dao.addSighting(sighting);
+
+        Sighting fromDao = dao.getSightingById(sighting.getSightingId());
+        assertEquals(fromDao, sighting);
+
     }
 
     /**
@@ -149,6 +212,46 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testDeleteSighting() {
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
+
+        dao.addLocation(location);
+
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
+
+        dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        dao.addSighting(sighting);
+
+        Sighting fromDao = dao.getSightingById(sighting.getSightingId());
+        assertEquals(fromDao, sighting);
+        dao.deleteSighting(sighting.getSightingId());
+        assertNull(dao.getSightingById(sighting.getSightingId()));
     }
 
     /**
@@ -156,13 +259,51 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testUpdateSighting() {
-    }
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
 
-    /**
-     * Test of getSightingById method, of class SuperSightingsDaoImpl.
-     */
-    @Test
-    public void testGetSightingById() {
+        dao.addLocation(location);
+
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
+
+        dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        dao.addSighting(sighting);
+
+        Sighting fromDao = dao.getSightingById(sighting.getSightingId());
+        assertEquals(fromDao, sighting);
+
+        sighting.setDate(Date.valueOf(LocalDate.parse("2008-02-23")));
+        dao.updateSighting(sighting);
+
+        fromDao = dao.getSightingById(sighting.getSightingId());
+        assertEquals(fromDao, sighting);
+
     }
 
     /**
@@ -170,13 +311,100 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testGetSightingsByLocationId() {
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
+
+        dao.addLocation(location);
+
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
+
+        dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        dao.addSighting(sighting);
+
+        Sighting fromDao = dao.getSightingById(sighting.getSightingId());
+        assertEquals(fromDao, sighting);
+
+        List<Sighting> sightings = new ArrayList<>();
+        sightings = dao.getSightingsByLocationId(sighting.getLocation().getLocationId());
+        assertEquals(1, sightings.size());
+
     }
 
     /**
-     * Test of getSightingsBySuperHumanId method, of class SuperSightingsDaoImpl.
+     * Test of getSightingsBySuperHumanId method, of class
+     * SuperSightingsDaoImpl.
      */
     @Test
     public void testGetSightingsBySuperHumanId() {
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
+
+        dao.addLocation(location);
+
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
+
+        dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        dao.addSighting(sighting);
+
+        Sighting fromDao = dao.getSightingById(sighting.getSightingId());
+        assertEquals(fromDao, sighting);
+
+        List<Sighting> sightings = new ArrayList<>();
+        sightings = dao.getSightingsBySuperHumanId(hero.getSuperHumanId());
+        assertEquals(1, sightings.size());
+        
     }
 
     /**
@@ -184,31 +412,70 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testGetAllSightings() {
-    }
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
 
-    /**
-     * Test of addSuperHuman method, of class SuperSightingsDaoImpl.
-     */
-    @Test
-    public void testAddSuperHuman() {
+        dao.addLocation(location);
+
         List<Organization> orgs = new ArrayList<>();
         Organization organization = new Organization();
         organization.setName("The Avengers");
         organization.setDescription("Group of most powerful Marvel Heros");
         organization.setPhone("763-555-5555");
         organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
-        
+
         dao.addOrganization(organization);
         orgs.add(organization);
-        
+
+        SuperHuman hero = new SuperHuman();
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
+
+        dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        List<Sighting> sightings = new ArrayList<>();
+        dao.addSighting(sighting);
+        sightings.add(sighting);
+
+        assertEquals(1, sightings.size());
+    }
+
+    /**
+     * Test of addSuperHuman method, of class SuperSightingsDaoImpl.
+     */
+    @Test
+    public void testAddGetSuperHuman() {
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
         SuperHuman hero = new SuperHuman();
         hero.setOrganizations(orgs);
         hero.setName("DeadPool");
         hero.setDescription("Best Marvel hero ever!");
         hero.setPowers("Regeneration, teleportation, immortal.");
-        
+
         dao.addSuperHuman(hero);
-        
+
         SuperHuman fromDao = dao.getSuperHumanById(hero.getSuperHumanId());
         assertEquals(fromDao, hero);
     }
@@ -224,18 +491,18 @@ public class SuperSightingsDaoImplTest {
         organization.setDescription("Group of most powerful Marvel Heros");
         organization.setPhone("763-555-5555");
         organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
-        
+
         dao.addOrganization(organization);
         orgs.add(organization);
-        
+
         SuperHuman hero = new SuperHuman();
         hero.setOrganizations(orgs);
         hero.setName("DeadPool");
         hero.setDescription("Best Marvel hero ever!");
         hero.setPowers("Regeneration, teleportation, immortal.");
-        
+
         dao.addSuperHuman(hero);
-        
+
         SuperHuman fromDao = dao.getSuperHumanById(hero.getSuperHumanId());
         assertEquals(fromDao, hero);
         dao.deleteSuperHuman(hero.getSuperHumanId());
@@ -247,20 +514,71 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testUpdateSuperHuman() {
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setOrganizations(orgs);
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+
+        dao.addSuperHuman(hero);
+
+        SuperHuman fromDao = dao.getSuperHumanById(hero.getSuperHumanId());
+        assertEquals(fromDao, hero);
+
+        hero.setName("Spiderman");
+        dao.updateSuperHuman(hero);
+
+        fromDao = dao.getSuperHumanById(hero.getSuperHumanId());
+        assertEquals(fromDao, hero);
+
     }
 
     /**
-     * Test of getSuperHumanById method, of class SuperSightingsDaoImpl.
-     */
-    @Test
-    public void testGetSuperHumanById() {
-    }
-
-    /**
-     * Test of getSuperHumansByOrganizationId method, of class SuperSightingsDaoImpl.
+     * Test of getSuperHumansByOrganizationId method, of class
+     * SuperSightingsDaoImpl.
      */
     @Test
     public void testGetSuperHumansByOrganizationId() {
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setOrganizations(orgs);
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+
+        dao.addSuperHuman(hero);
+
+        SuperHuman hero2 = new SuperHuman();
+        hero2.setOrganizations(orgs);
+        hero2.setName("SpiderMan");
+        hero2.setDescription("Funny!");
+        hero2.setPowers("Climbing on walls, agility.");
+
+        dao.addSuperHuman(hero2);
+
+        List<SuperHuman> supers = new ArrayList<>();
+        supers = dao.getSuperHumansByOrganizationId(organization.getOrganizationId());
+        assertEquals(2, supers.size());
+
     }
 
     /**
@@ -268,24 +586,45 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testGetAllSuperHumans() {
+        List<Organization> orgs = new ArrayList<>();
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        SuperHuman hero = new SuperHuman();
+        hero.setOrganizations(orgs);
+        hero.setName("DeadPool");
+        hero.setDescription("Best Marvel hero ever!");
+        hero.setPowers("Regeneration, teleportation, immortal.");
+
+        List<SuperHuman> supers = new ArrayList<>();
+        dao.addSuperHuman(hero);
+        supers.add(hero);
+
+        assertEquals(1, supers.size());
     }
 
     /**
      * Test of addOrganization method, of class SuperSightingsDaoImpl.
      */
     @Test
-    public void testAddOrganization() {
+    public void testAddGetOrganization() {
         Organization organization = new Organization();
         organization.setName("The Avengers");
         organization.setDescription("Group of most powerful Marvel Heros");
         organization.setPhone("763-555-5555");
         organization.setAddress("123 Blue Bird St. Salt Lake City, Utah");
-        
+
         dao.addOrganization(organization);
-        
+
         Organization fromDao = dao.getOrganizationById(organization.getOrganizationId());
         assertEquals(fromDao, organization);
-                
+
     }
 
     /**
@@ -298,9 +637,9 @@ public class SuperSightingsDaoImplTest {
         organization.setDescription("Group of most powerful Marvel Heros");
         organization.setPhone("763-555-5555");
         organization.setAddress("123 Blue Bird St. Salt Lake City, Utah");
-        
+
         dao.addOrganization(organization);
-        
+
         Organization fromDao = dao.getOrganizationById(organization.getOrganizationId());
         assertEquals(fromDao, organization);
         dao.deleteOrganization(organization.getOrganizationId());
@@ -312,13 +651,22 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testUpdateOrganization() {
-    }
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setAddress("234 Blue Bird St. Salt Lake City, Utah");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("123 Blue Bird St. Salt Lake City, Utah");
 
-    /**
-     * Test of getOrganizationById method, of class SuperSightingsDaoImpl.
-     */
-    @Test
-    public void testGetOrganizationById() {
+        dao.addOrganization(organization);
+        Organization fromDao = dao.getOrganizationById(organization.getOrganizationId());
+        assertEquals(fromDao, organization);
+
+        organization.setName("Justice League");
+        dao.updateOrganization(organization);
+        fromDao = dao.getOrganizationById(organization.getOrganizationId());
+        assertEquals(fromDao, organization);
+
     }
 
     /**
@@ -326,6 +674,18 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testGetAllOrganizations() {
+        Organization organization = new Organization();
+        organization.setName("The Avengers");
+        organization.setDescription("Group of most powerful Marvel Heros");
+        organization.setPhone("763-555-5555");
+        organization.setAddress("123 Blue Bird St. Salt Lake City, Utah");
+
+        List<Organization> orgs = new ArrayList<>();
+        dao.addOrganization(organization);
+        orgs.add(organization);
+
+        assertEquals(1, orgs.size());
+
     }
-    
+
 }

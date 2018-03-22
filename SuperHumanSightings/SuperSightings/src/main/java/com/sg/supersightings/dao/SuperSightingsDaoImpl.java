@@ -11,6 +11,7 @@ import com.sg.supersightings.model.Sighting;
 import com.sg.supersightings.model.SuperHuman;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,13 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @author jakeduerr
  */
 public class SuperSightingsDaoImpl implements SuperSightingsDao {
-    
+
     private JdbcTemplate jdbcTemplate;
 
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-    
+
     //location
     private static final String SQL_INSERT_LOCATION
             = "insert into location (`name`, description, address, "
@@ -36,125 +37,130 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
 
     private static final String SQL_DELETE_LOCATION
             = "delete from location where locationId = ?";
-    
+
     private static final String SQL_UPDATE_LOCATION
             = "update location set `name` = ?, description = ?, address = ?, "
             + "latitude = ?, longitude = ? where locationId = ?";
-     
+
     private static final String SQL_SELECT_LOCATION
             = "select * from location where locationId = ?";
-            
+
     private static final String SQL_SELECT_LOCATION_BY_SIGHTING_ID
             = "select lo.locationId, lo.name, lo.description, lo.address, "
             + "lo.latitude, lo.longitude from location lo "
-            + "join sighting on lo.locationId = sighting.locationId "
-            + "where sighting.sighingId = ?";
-    
+            + "join sighting s on lo.locationId = s.locationId "
+            + "where s.sightingId = ?";
+
     private static final String SQL_SELECT_ALL_LOCATIONS
             = "select * from location";
-        
+
     //sighting
     private static final String SQL_INSERT_SIGHTING
             = "insert into sighting (locationId, `date`) values (?, ?)";
-    
+
     private static final String SQL_INSERT_SUPERHUMAN_SIGHTING
             = "insert into superHumanSighting (sightingId, superHumanId) values (?, ?)";
-             
+
     private static final String SQL_DELETE_SIGHTING
             = "delete from sighting where sightingId = ?";
-    
+
+    //make query for delete sighting thats referencing a location
+    private static final String SQL_DELETE_SIGHTING_LOCATION
+            = "delete from sighting where locationId = ?";
+
     private static final String SQL_DELETE_SUPERHUMAN_SIGHTING
             = "delete from superHumanSighting where sightingId = ?";
-             
+
+    //work in progress
+    private static final String SQL_DELETE_SUPERHUMAN_SIGHTING_LOCATION
+            = "delete shs from superHumanSighting shs "
+            + "join sighting s on shs.sightingId = s.sightingId where s.locationId = ?";
+
     private static final String SQL_UPDATE_SIGHTING
-            = "update sighting set `date` = ? where sightingId = ?";
-           
+            = "update sighting set locationId = ?, `date` = ? where sightingId = ?";
+
     private static final String SQL_SELECT_SIGHTING
             = "select * from sighting where sightingId = ?";
-    
+
     private static final String SQL_SELECT_SIGHTING_BY_LOCATION_ID
             = "select * from sighting where locationId = ?";
-            
+
     private static final String SQL_SELECT_SIGHTING_BY_SUPERHUMAN_ID
             = "select s.sightingId, s.locationId, s.date from sighting s "
-            + "join superHumanSighting shs on s.superHumanId = shs.sightingId "
+            + "join superHumanSighting shs on s.sightingId = shs.sightingId "
             + "where shs.superHumanId = ?";
-            
+
     private static final String SQL_SELECT_ALL_SIGHTINGS
             = "select * from sighting";
-    
+
     //superhuman
     private static final String SQL_INSERT_SUPERHUMAN
             = "insert into superHuman (`name`, description, powers) values (?, ?, ?)";
-    
+
     private static final String SQL_INSERT_SUPERHUMAN_ORGANIZATION
             = "insert into superHumanOrganization (superHumanId, organizationId) values (?, ?)";
-            
+
     private static final String SQL_DELETE_SUPERHUMAN
             = "delete from superHuman where superHumanId = ?";
-    
+
     private static final String SQL_DELETE_SUPERHUMAN_ORGANIZATION
             = "delete from superHumanOrganization where superHumanId = ?";
-             
+
     private static final String SQL_UPDATE_SUPERHUMAN
-            = "update superHuman set `name` = ?, description = ?, powers = ? " 
+            = "update superHuman set `name` = ?, description = ?, powers = ? "
             + "where superHumanId = ?";
-             
+
     private static final String SQL_SELECT_SUPERHUMAN
             = "select * from superHuman where superHumanId = ?";
-    
+
     private static final String SQL_SELECT_SUPERHUMAN_BY_SIGHTING_ID
-            = "select sh.superHumanId, sh.name, sh.description, sh.powers " 
-            + "from superHuman sh join superHumanSighting shs on sh.sightingId = " 
-            + "shs.superHuman where shs.sightingId = ?";
-             
+            = "select sh.superHumanId, sh.name, sh.description, sh.powers "
+            + "from superHuman sh join superHumanSighting shs on sh.superHumanId = "
+            + "shs.superHumanId where shs.sightingId = ?";
+
     private static final String SQL_SELECT_SUPERHUMAN_BY_ORGANIZATION_ID
             = "select sh.superHumanId, sh.name, sh.description, sh.powers "
-            + "from superHuman sh join superHumanOrganization sho on sh.organizationId = "
-            + "sho.superHuman where sho.organizationId = ?";
-             
+            + "from superHuman sh join superHumanOrganization sho on sh.superHumanId = "
+            + "sho.superHumanId where sho.organizationId = ?";
+
     private static final String SQL_SELECT_ALL_SUPERHUMANS
             = "select * from superHuman";
-    
+
     //organization
     private static final String SQL_INSERT_ORGANIZATION
             = "insert into organization (`name`, description, phone, address) "
             + "values (?, ?, ?, ?)";
-            
+
     private static final String SQL_DELETE_ORGANIZATION
             = "delete from organization where organizationId = ?";
-            
+
+    private static final String SQL_DELETE_ORGANIZATION_SUPERHUMAN
+            = "delete from superHumanOrganization where organizationId = ?";
+
     private static final String SQL_UPDATE_ORGANIZATION
             = "update organization set `name` = ?, description = ?, phone = ?, address = ? "
             + "where organizationId = ?";
-             
+
     private static final String SQL_SELECT_ORGANIZATION
             = "select * from organization where organizationId = ?";
-    
+
     private static final String SQL_SELECT_ORGANIZATION_BY_SUPERHUMAN_ID
             = "select org.organizationId, org.name, org.description, org.phone, "
-            + "org.address from organization org join superHumanOrganization sho " 
+            + "org.address from organization org join superHumanOrganization sho "
             + "on org.organizationId = sho.organizationId where sho.superHumanId = ?";
-            
+
     private static final String SQL_SELECT_ALL_ORGANIZATIONS
             = "select * from organization";
-    
-    
-    private Location findLocationForSighting(Sighting sighting) {
-        return jdbcTemplate.queryForObject(SQL_SELECT_LOCATION_BY_SIGHTING_ID, 
-                new LocationMapper(),
-                sighting.getSightingId());
-    }
-    
+
     private void insertSuperHumansSightings(Sighting sighting) {
         final int sightingId = sighting.getSightingId();
         final List<SuperHuman> supers = sighting.getSuperHumans();
-        for (SuperHuman currentSuper: supers) {
+        for (SuperHuman currentSuper : supers) {
             jdbcTemplate.update(SQL_INSERT_SUPERHUMAN_SIGHTING,
                     sightingId, currentSuper.getSuperHumanId());
         }
     }
-    
+
     private void insertOrganizationsSuperHumans(SuperHuman superHuman) {
         final int superHumanId = superHuman.getSuperHumanId();
         final List<Organization> orgs = superHuman.getOrganizations();
@@ -163,37 +169,56 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
                     superHumanId, currentOrg.getOrganizationId());
         }
     }
-    
-    private List<Sighting> findSightingsForLocation(Location location) {
-        return jdbcTemplate.query(SQL_SELECT_SIGHTING_BY_LOCATION_ID,
-                new SightingMapper(),
-                location.getLocationId());
-    }
-    
-    private List<Sighting> findSightingsForSuperHuman(SuperHuman superHuman) {
-        return jdbcTemplate.query(SQL_SELECT_SIGHTING_BY_SUPERHUMAN_ID,
-                new SightingMapper(),
-                superHuman.getSuperHumanId());
-    }
-    
-    private List<SuperHuman> findSuperHumansForSighting(Sighting sighting) {
-        return jdbcTemplate.query(SQL_SELECT_SUPERHUMAN_BY_SIGHTING_ID,
-                new SuperHumanMapper(),
+
+    private Location findLocationForSighting(Sighting sighting) {
+        return jdbcTemplate.queryForObject(SQL_SELECT_LOCATION_BY_SIGHTING_ID,
+                new LocationMapper(),
                 sighting.getSightingId());
     }
-    
-    private List<SuperHuman> findSuperHumansForOrganization(Organization organization) {
+
+    //public and expanded   -set superHumans and set locations for sightings
+    public List<Sighting> findSightingsForLocation(Location location) {
+        List<Sighting> sightings = jdbcTemplate.query(SQL_SELECT_SIGHTING_BY_LOCATION_ID,
+                new SightingMapper(),
+                location.getLocationId());
+        associateLocationAndSuperHumansWithSightings(sightings);
+        return sightings;
+
+    }
+
+    //public and expanded
+    public List<Sighting> findSightingsForSuperHuman(SuperHuman superHuman) {
+        List<Sighting> sightings = jdbcTemplate.query(SQL_SELECT_SIGHTING_BY_SUPERHUMAN_ID,
+                new SightingMapper(),
+                superHuman.getSuperHumanId());
+        associateLocationAndSuperHumansWithSightings(sightings);
+        return sightings;
+    }
+
+    private List<SuperHuman> findSuperHumansForSighting(Sighting sighting) {
+        List<SuperHuman> supers = jdbcTemplate.query(SQL_SELECT_SUPERHUMAN_BY_SIGHTING_ID,
+                new SuperHumanMapper(),
+                sighting.getSightingId());
+        for (SuperHuman currentSuper : supers) {
+            currentSuper.setOrganizations(findOrganizationForSuperHuman(currentSuper));
+        }
+        return supers;
+
+    }
+
+    //public
+    public List<SuperHuman> findSuperHumansForOrganization(Organization organization) {
         return jdbcTemplate.query(SQL_SELECT_SUPERHUMAN_BY_ORGANIZATION_ID,
                 new SuperHumanMapper(),
                 organization.getOrganizationId());
     }
-    
+
     private List<Organization> findOrganizationForSuperHuman(SuperHuman superHuman) {
         return jdbcTemplate.query(SQL_SELECT_ORGANIZATION_BY_SUPERHUMAN_ID,
                 new OrganizationMapper(),
                 superHuman.getSuperHumanId());
     }
-    
+
     private List<Sighting> associateLocationAndSuperHumansWithSightings(List<Sighting> sightings) {
         for (Sighting currentSighting : sightings) {
             currentSighting.setSuperHumans(findSuperHumansForSighting(currentSighting));
@@ -201,15 +226,14 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
         }
         return sightings;
     }
-    
+
     private List<SuperHuman> associateOrganizationsWithSuperHumans(List<SuperHuman> supers) {
         for (SuperHuman currentSuper : supers) {
             currentSuper.setOrganizations(findOrganizationForSuperHuman(currentSuper));
         }
         return supers;
     }
-           
-            
+
     @Override
     @Transactional
     public void addLocation(Location location) {
@@ -219,13 +243,16 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
                 location.getAddress(),
                 location.getLatitude(),
                 location.getLongitude());
-        
+
         int locationId = jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class);
         location.setLocationId(locationId);
     }
 
     @Override
+    @Transactional
     public void deleteLocation(int locationId) {
+        jdbcTemplate.update(SQL_DELETE_SUPERHUMAN_SIGHTING_LOCATION, locationId);
+        jdbcTemplate.update(SQL_DELETE_SIGHTING_LOCATION, locationId);
         jdbcTemplate.update(SQL_DELETE_LOCATION, locationId);
     }
 
@@ -261,7 +288,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
         jdbcTemplate.update(SQL_INSERT_SIGHTING,
                 sighting.getLocation().getLocationId(),
                 sighting.getDate());
-                
+
         sighting.setSightingId(jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class));
         insertSuperHumansSightings(sighting);
     }
@@ -280,15 +307,16 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
                 sighting.getLocation().getLocationId(),
                 sighting.getDate(),
                 sighting.getSightingId());
-        
+
         jdbcTemplate.update(SQL_DELETE_SUPERHUMAN_SIGHTING, sighting.getSightingId());
+
         insertSuperHumansSightings(sighting);
     }
 
     @Override
     public Sighting getSightingById(int sightingId) {
         try {
-            Sighting sighting = jdbcTemplate.queryForObject(SQL_SELECT_SIGHTING, 
+            Sighting sighting = jdbcTemplate.queryForObject(SQL_SELECT_SIGHTING,
                     new SightingMapper(),
                     sightingId);
             sighting.setSuperHumans(findSuperHumansForSighting(sighting));
@@ -298,7 +326,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
             return null;
         }
     }
-    
+
     @Override
     public List<Sighting> getSightingsByLocationId(int locationId) {
         List<Sighting> sightings
@@ -331,9 +359,9 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
                 superHuman.getName(),
                 superHuman.getDescription(),
                 superHuman.getPowers());
-        
+
         superHuman.setSuperHumanId(jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class));
-        
+
         insertOrganizationsSuperHumans(superHuman);
     }
 
@@ -380,7 +408,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
 
     @Override
     public List<SuperHuman> getAllSuperHumans() {
-        List<SuperHuman> supers 
+        List<SuperHuman> supers
                 = jdbcTemplate.query(SQL_SELECT_ALL_SUPERHUMANS,
                         new SuperHumanMapper());
         return associateOrganizationsWithSuperHumans(supers);
@@ -394,14 +422,16 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
                 organization.getDescription(),
                 organization.getPhone(),
                 organization.getAddress());
-        
+
         int organizationId = jdbcTemplate.queryForObject("select LAST_INSERT_ID()", Integer.class);
-        
+
         organization.setOrganizationId(organizationId);
     }
 
     @Override
+    @Transactional
     public void deleteOrganization(int organizationId) {
+        jdbcTemplate.update(SQL_DELETE_ORGANIZATION_SUPERHUMAN, organizationId);
         jdbcTemplate.update(SQL_DELETE_ORGANIZATION, organizationId);
     }
 
@@ -418,7 +448,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
     @Override
     public Organization getOrganizationById(int organizationId) {
         try {
-            return jdbcTemplate.queryForObject(SQL_SELECT_ORGANIZATION, 
+            return jdbcTemplate.queryForObject(SQL_SELECT_ORGANIZATION,
                     new OrganizationMapper(), organizationId);
         } catch (EmptyResultDataAccessException ex) {
             return null;
@@ -429,7 +459,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
     public List<Organization> getAllOrganizations() {
         return jdbcTemplate.query(SQL_SELECT_ALL_ORGANIZATIONS, new OrganizationMapper());
     }
-    
+
     private static final class LocationMapper implements RowMapper<Location> {
 
         @Override
@@ -442,11 +472,11 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
             loc.setLatitude(rs.getBigDecimal("latitude"));
             loc.setLongitude(rs.getBigDecimal("longitude"));
             return loc;
-            
+
         }
-        
+
     }
-    
+
     private static final class SightingMapper implements RowMapper<Sighting> {
 
         @Override
@@ -455,11 +485,11 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
             si.setSightingId(rs.getInt("sightingId"));
             si.setDate(rs.getDate("date"));
             return si;
-            
+
         }
-        
+
     }
-    
+
     private static final class SuperHumanMapper implements RowMapper<SuperHuman> {
 
         @Override
@@ -470,11 +500,11 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
             sh.setDescription(rs.getString("description"));
             sh.setPowers(rs.getString("powers"));
             return sh;
-            
+
         }
-        
+
     }
-    
+
     private static final class OrganizationMapper implements RowMapper<Organization> {
 
         @Override
@@ -486,10 +516,9 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
             org.setPhone(rs.getString("phone"));
             org.setAddress(rs.getString("address"));
             return org;
-            
+
         }
-        
+
     }
-    
-    
+
 }

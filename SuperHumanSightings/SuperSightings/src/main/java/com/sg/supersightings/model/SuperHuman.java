@@ -5,6 +5,7 @@
  */
 package com.sg.supersightings.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,12 +14,12 @@ import java.util.Objects;
  * @author jakeduerr
  */
 public class SuperHuman {
-    
+
     private int superHumanId;
     private String name;
     private String description;
     private String powers;
-    private List<Organization> organizations;
+    private List<Organization> organizations = new ArrayList<>();
 
     public int getSuperHumanId() {
         return superHumanId;
@@ -101,7 +102,4 @@ public class SuperHuman {
         return true;
     }
 
-    
-    
-    
 }
