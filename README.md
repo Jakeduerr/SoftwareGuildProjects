@@ -14,6 +14,8 @@ A collection of projects from my time at The Software Guild Bootcamp
 >   * A 3-page website that includes a hompage, menu, and contact page to learn HTML and CS
 >   * After learning the basics of CSS, Bootstrap was impliemted.
 > * All other files are simple javascript exercises to understand basic programming concepts (Loops, If/Else, etc) that can be applied across all languages.
+
+- - - - 
   
 > Programming Basics Assignment
 > ---------------
@@ -61,8 +63,6 @@ A collection of projects from my time at The Software Guild Bootcamp
 >   * Impliments exception handling.
 >   * Impliemtns unit testing with JUnit
 >   * Data persists though file IO.
-- - - - 
-- - - -
 - - - -
   
 > FrontEndVendingMachine
