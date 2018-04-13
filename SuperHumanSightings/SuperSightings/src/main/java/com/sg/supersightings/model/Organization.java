@@ -6,6 +6,8 @@
 package com.sg.supersightings.model;
 
 import java.util.Objects;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -14,9 +16,19 @@ import java.util.Objects;
 public class Organization {
 
     private int organizationId;
+
+    @NotEmpty(message = "You must supply a value for Name.")
+    @Length(max = 45, message = "Name must be no more than 45 characters in length.")
     private String name;
+
+    @NotEmpty(message = "You must supply a value for Description.")
+    @Length(max = 45, message = "Description must be no more than 45 characters in length.")
     private String description;
+
+    @Length(max = 15, message = "Phone must be no more than 15 characters in length.")
     private String phone;
+
+    @Length(max = 75, message = "Address must be no more than 75 characters in length.")
     private String address;
 
     public int getOrganizationId() {

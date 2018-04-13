@@ -8,6 +8,8 @@ package com.sg.supersightings.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -16,9 +18,19 @@ import java.util.Objects;
 public class SuperHuman {
 
     private int superHumanId;
+
+    @NotEmpty(message = "You must supply a value for Name.")
+    @Length(max = 45, message = "Name must be no more than 45 characters in length.")
     private String name;
+
+    @NotEmpty(message = "You must supply a value for Description.")
+    @Length(max = 150, message = "Description must be no more than 150 characters in length.")
     private String description;
+
+    @NotEmpty(message = "You must supply a value for Powers.")
+    @Length(max = 200, message = "Powers must be no more than 200 characters in length.")
     private String powers;
+
     private List<Organization> organizations = new ArrayList<>();
 
     public int getSuperHumanId() {
@@ -100,6 +112,15 @@ public class SuperHuman {
             return false;
         }
         return true;
+    }
+    
+    public boolean isMember(int orgId) {
+        boolean result = false;
+        if(organizations != null) {
+            result = organizations.stream().anyMatch(o -> o.getOrganizationId() == orgId);
+            
+        }
+        return result;
     }
 
 }

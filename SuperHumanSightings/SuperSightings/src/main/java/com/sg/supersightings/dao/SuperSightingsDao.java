@@ -16,6 +16,17 @@ import java.util.List;
  * @author jakeduerr
  */
 public interface SuperSightingsDao {
+    
+    //helper methods
+    List<Sighting> findSightingsForLocation(Location location);
+
+    List<Sighting> findSightingsForSuperHuman(SuperHuman superHuman);
+    
+    List<Sighting> findTenMostRecentSightings();
+    
+    List<SuperHuman> findSuperHumansForSighting(Sighting sighting);
+    
+    List<SuperHuman> findSuperHumansForOrganization(Organization organization);
 
     //Location methods
     void addLocation(Location location);

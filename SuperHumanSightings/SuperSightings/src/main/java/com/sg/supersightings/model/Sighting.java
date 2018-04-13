@@ -9,6 +9,11 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -16,9 +21,13 @@ import java.util.Objects;
  */
 public class Sighting {
 
+    
     private int sightingId;
+    
     private Date date;
+    
     private Location location;
+    
     private List<SuperHuman> superHumans = new ArrayList<>();
 
     public int getSightingId() {
@@ -88,6 +97,15 @@ public class Sighting {
             return false;
         }
         return true;
+    }
+    
+    public boolean isMember(int superhumanId) {
+        boolean result = false;
+        if(superHumans != null) {
+            result = superHumans.stream().anyMatch(o -> o.getSuperHumanId() == superhumanId);
+            
+        }
+        return result;
     }
 
 }

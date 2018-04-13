@@ -7,6 +7,8 @@ package com.sg.supersightings.model;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -15,10 +17,23 @@ import java.util.Objects;
 public class Location {
 
     private int locationId;
+
+    @NotEmpty(message = "You must supply a value for Name.")
+    @Length(max = 75, message = "Name must be no more than 75 characters in length.")
     private String name;
+
+//    @NotEmpty(message = "You must supply a value for Description.")
+    @Length(max = 60, message = "Description must be no more than 60 characters in length.")
     private String description;
+
+//    @NotEmpty(message = "You must supply a value for Address.")
+    @Length(max = 75, message = "Address must be no more than 75 characters in length.")
     private String address;
+
+//    @NotEmpty(message = "You must supply a value for Latitude.")
     private BigDecimal latitude;
+
+//    @NotEmpty(message = "You must supply a value for Longitude.")
     private BigDecimal longitude;
 
     public int getLocationId() {

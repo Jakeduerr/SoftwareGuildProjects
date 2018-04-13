@@ -89,6 +89,9 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
             = "select s.sightingId, s.locationId, s.date from sighting s "
             + "join superHumanSighting shs on s.sightingId = shs.sightingId "
             + "where shs.superHumanId = ?";
+    
+    private static final String SQL_SELECT_SIGHTING_MOST_RECENT
+            = "select * from sighting order by date desc limit 0,10";
 
     private static final String SQL_SELECT_ALL_SIGHTINGS
             = "select * from sighting";
@@ -102,6 +105,12 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
 
     private static final String SQL_DELETE_SUPERHUMAN
             = "delete from superHuman where superHumanId = ?";
+    
+    //make superhuman delete from sighting/superhuman by superhuman Id
+    private static final String SQL_DELETE_SIGHTING_SUPERHUMAN
+            = "delete from superHumanSighting where superHumanId = ?";
+//            = "delete shs from superHumanSighting shs "
+//            + "join superHuman sh on shs.sightingId = sh.sightingId where sh.superHumanId = ?";
 
     private static final String SQL_DELETE_SUPERHUMAN_ORGANIZATION
             = "delete from superHumanOrganization where superHumanId = ?";
@@ -177,6 +186,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
     }
 
     //public and expanded   -set superHumans and set locations for sightings
+    @Override
     public List<Sighting> findSightingsForLocation(Location location) {
         List<Sighting> sightings = jdbcTemplate.query(SQL_SELECT_SIGHTING_BY_LOCATION_ID,
                 new SightingMapper(),
@@ -187,6 +197,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
     }
 
     //public and expanded
+    @Override
     public List<Sighting> findSightingsForSuperHuman(SuperHuman superHuman) {
         List<Sighting> sightings = jdbcTemplate.query(SQL_SELECT_SIGHTING_BY_SUPERHUMAN_ID,
                 new SightingMapper(),
@@ -194,8 +205,16 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
         associateLocationAndSuperHumansWithSightings(sightings);
         return sightings;
     }
-
-    private List<SuperHuman> findSuperHumansForSighting(Sighting sighting) {
+    
+    @Override
+    public List<Sighting> findTenMostRecentSightings() {
+        List<Sighting> sightings = jdbcTemplate.query(SQL_SELECT_SIGHTING_MOST_RECENT,
+                new SightingMapper());
+        return associateLocationAndSuperHumansWithSightings(sightings);
+    }
+    
+    @Override
+    public List<SuperHuman> findSuperHumansForSighting(Sighting sighting) {
         List<SuperHuman> supers = jdbcTemplate.query(SQL_SELECT_SUPERHUMAN_BY_SIGHTING_ID,
                 new SuperHumanMapper(),
                 sighting.getSightingId());
@@ -207,6 +226,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
     }
 
     //public
+    @Override
     public List<SuperHuman> findSuperHumansForOrganization(Organization organization) {
         return jdbcTemplate.query(SQL_SELECT_SUPERHUMAN_BY_ORGANIZATION_ID,
                 new SuperHumanMapper(),
@@ -369,6 +389,7 @@ public class SuperSightingsDaoImpl implements SuperSightingsDao {
     @Transactional
     public void deleteSuperHuman(int superHumanId) {
         jdbcTemplate.update(SQL_DELETE_SUPERHUMAN_ORGANIZATION, superHumanId);
+        jdbcTemplate.update(SQL_DELETE_SIGHTING_SUPERHUMAN, superHumanId);
         jdbcTemplate.update(SQL_DELETE_SUPERHUMAN, superHumanId);
     }
 

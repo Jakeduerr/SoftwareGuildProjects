@@ -458,6 +458,33 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testAddGetSuperHuman() {
+//        List<Organization> orgs = new ArrayList<>();
+//        Organization organization = new Organization();
+//        organization.setName("The Avengers");
+//        organization.setDescription("Group of most powerful Marvel Heros");
+//        organization.setPhone("763-555-5555");
+//        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+//
+//        dao.addOrganization(organization);
+//        orgs.add(organization);
+//
+//        SuperHuman hero = new SuperHuman();
+//        hero.setOrganizations(orgs);
+//        hero.setName("DeadPool");
+//        hero.setDescription("Best Marvel hero ever!");
+//        hero.setPowers("Regeneration, teleportation, immortal.");
+//
+//        dao.addSuperHuman(hero);
+
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
+
+        dao.addLocation(location);
+
         List<Organization> orgs = new ArrayList<>();
         Organization organization = new Organization();
         organization.setName("The Avengers");
@@ -469,12 +496,23 @@ public class SuperSightingsDaoImplTest {
         orgs.add(organization);
 
         SuperHuman hero = new SuperHuman();
-        hero.setOrganizations(orgs);
         hero.setName("DeadPool");
         hero.setDescription("Best Marvel hero ever!");
         hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
 
         dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        dao.addSighting(sighting);
+        dao.addSuperHuman(hero);
+        
 
         SuperHuman fromDao = dao.getSuperHumanById(hero.getSuperHumanId());
         assertEquals(fromDao, hero);
@@ -485,6 +523,33 @@ public class SuperSightingsDaoImplTest {
      */
     @Test
     public void testDeleteSuperHuman() {
+//        List<Organization> orgs = new ArrayList<>();
+//        Organization organization = new Organization();
+//        organization.setName("The Avengers");
+//        organization.setDescription("Group of most powerful Marvel Heros");
+//        organization.setPhone("763-555-5555");
+//        organization.setAddress("890 Fifth Avenue, Manhattan, New York City");
+//
+//        dao.addOrganization(organization);
+//        orgs.add(organization);
+//
+//        SuperHuman hero = new SuperHuman();
+//        hero.setOrganizations(orgs);
+//        hero.setName("DeadPool");
+//        hero.setDescription("Best Marvel hero ever!");
+//        hero.setPowers("Regeneration, teleportation, immortal.");
+//
+//        dao.addSuperHuman(hero);
+
+        Location location = new Location();
+        location.setName("Empire State Building");
+        location.setDescription("Fight on a skyscraper");
+        location.setAddress("350 5th Ave, New York, NY 10118");
+        location.setLatitude(new BigDecimal("40.7484"));
+        location.setLongitude(new BigDecimal("73.9857"));
+
+        dao.addLocation(location);
+
         List<Organization> orgs = new ArrayList<>();
         Organization organization = new Organization();
         organization.setName("The Avengers");
@@ -496,11 +561,21 @@ public class SuperSightingsDaoImplTest {
         orgs.add(organization);
 
         SuperHuman hero = new SuperHuman();
-        hero.setOrganizations(orgs);
         hero.setName("DeadPool");
         hero.setDescription("Best Marvel hero ever!");
         hero.setPowers("Regeneration, teleportation, immortal.");
+        hero.setOrganizations(orgs);
 
+        dao.addSuperHuman(hero);
+
+        Sighting sighting = new Sighting();
+        sighting.setLocation(location);
+        sighting.setDate(Date.valueOf(LocalDate.parse("2018-02-23")));
+        List<SuperHuman> supers = new ArrayList<>();
+        supers.add(hero);
+        sighting.setSuperHumans(supers);
+
+        dao.addSighting(sighting);
         dao.addSuperHuman(hero);
 
         SuperHuman fromDao = dao.getSuperHumanById(hero.getSuperHumanId());
