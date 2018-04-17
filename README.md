@@ -75,7 +75,7 @@ A collection of projects from my time at The Software Guild Bootcamp
   
 > SodaMachineSpringMVC
 > ---------------
-> Project in Java/web development using NetBeans IDE. JSP, JSTL, Java, CSS, Bootstrap.
+> Project in Java/web development using NetBeans IDE. JSP, JSTL, Java, CSS, and Bootstrap.
 > * Redesign of "SodaMachine" as web application, where Java is the back-end and the front-end.
 >   * Impliments Spring MVC architectural design.
 >   * Impliments JSP with JSTL for the front-end.
@@ -105,7 +105,8 @@ A collection of projects from my time at The Software Guild Bootcamp
   
 > FlashCardApp
 > ---------------
+> Group Project in Java/web development and MySQL database design using NetBeans IDE and MySQL Workbench. Java, SQL, JPA, Spring Security, HTML, CSS, Bootstrap, and JavaScript. 
 > * A web application that allows the user to sign up and login securely to the web page. Than view/study, delete, update, and add FlashCards. (A link to the Group Repository below)
->   * (https://github.com/jmaj-software-guild/FlashCardApp "FlashCardApp's GitHub Repository!")
+>   * FlashCardApp's GitHub Repository! - https://github.com/jmaj-software-guild/FlashCardApp 
 - - - -
 
